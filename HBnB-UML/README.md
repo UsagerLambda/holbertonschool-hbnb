@@ -11,8 +11,7 @@ This repository contains the implementation of **HBnB**, a web-based platform in
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+- [Authors](#authors)
 
 ---
 
@@ -43,6 +42,7 @@ Key HTTP response codes and errors handled:
 - **HTTP 200**: Successful retrieval of data.
 - **Error 409**: Conflict in data (e.g., duplicate entries).
 - **Error 400**: Bad request (invalid data or syntax).
+
 If you want to take a look at our [Sequence Diagram](https://www.zupimages.net/up/24/40/nblh.jpg)
 
 ### Class Diagrams
@@ -54,6 +54,7 @@ The system includes the following main classes:
 - **Amenity**: Stores amenities associated with places.
 
 Each class has corresponding attributes like `id`, `created_at`, and methods for CRUD operations.
+
 If you want to take a look at our [Class Diagram](https://www.zupimages.net/up/24/40/fgdd.jpg)
 
 ### Layered Architecture
