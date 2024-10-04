@@ -87,8 +87,8 @@ Here is an example of our Layered Architecture:
 To run the **HBnB** project locally, follow these steps:
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/hbnb.git
+```bash
+git clone https://github.com/yourusername/hbnb.git
 
 2. Navigate into the project directory:
 ```bash
