@@ -15,14 +15,10 @@ class User(BaseModel):
         self.is_admin = is_admin
         self.place = []
 
+
     def add_place(self, place):
         self.place.append(place)
 
-    def register(self):
-        pass
 
     def updateProfile(self, data):
         self.update(data)
-
-    def delete(self):
-        pass

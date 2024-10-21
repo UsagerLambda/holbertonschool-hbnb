@@ -10,12 +10,3 @@ class Review(BaseModel):
         self.rating = rating
         self.place = place
         self.user = user
-
-    def createReview(self):
-        pass
-
-    def deleteReview(self):
-        pass
-
-    def listReview(self):
-        pass
