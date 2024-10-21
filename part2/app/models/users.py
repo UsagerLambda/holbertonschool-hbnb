@@ -1,23 +1,24 @@
-import uuid
-from datetime import datetime
+from baseModel import BaseModel
 
-class User:
-    def __init__(self, first_name, last_name, email):
-        self.id = str(uuid.uuid4())
+class User(BaseModel):
+    def __init__(self, first_name, last_name, email, is_admin=False):
+        super().__init__()
+        valid_first_name = self.name_length(first_name)
+        valid_last_name = self.name_length(last_name)
+        if isinstance(valid_first_name, tuple):
+            raise ValueError(valid_first_name[0])
+        if isinstance(valid_last_name, tuple):
+            raise ValueError(valid_last_name[0])
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.is_admin = False
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        self.is_admin = is_admin
 
     def register(self):
         pass
 
-
-    def updateProfile(self):
-        self.updated_at = datetime.now()
-
+    def updateProfile(self, data):
+        self.update(data)
 
     def delete(self):
         pass

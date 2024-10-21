@@ -1,25 +1,22 @@
-from datetime import datetime
-import uuid
+from baseModel import BaseModel
 
-class Place:
-    def __init__(self, user_id, title, description, price, latitude, longitude):
-        self.id = str(uuid.uuid4())
-        self.user_id = user_id
+class Place(BaseModel):
+    def __init__(self, title, description, price, latitude, longitude, owner):
+        super().__init__()
         self.title = title
-        self.description = description
+        self.description = self.place_length(description)
         self.price = price
         self.latitude = latitude
         self.longitude = longitude
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        self.owner = owner
+        self.reviews = []
+        self.amenities = []
 
     def createPlace(self):
         pass
 
+    def add_review(self, review):
+        self.reviews.append(review)
 
-    def deletePlace(self):
-        pass
-
-
-    def listPlace(self):
-        pass
+    def add_amenity(self, amenity):
+        self.amenities.append(amenity)

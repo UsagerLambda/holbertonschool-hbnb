@@ -1,18 +1,16 @@
-from datetime import datetime
-import uuid
+from baseModel import BaseModel
 
-class Amenity:
-    def __init__(self, name, description):
-        self.id = str(uuid.uuid4())
+class Amenity(BaseModel):
+    def __init__(self, name):
+        super().__init__()
         self.name = name
-        self.description = description
 
     def createAmenity(self):
         pass
 
 
     def updateAmenity(self):
-        self.updated_at = datetime.now()
+        pass
 
 
     def deleteAmenity(self):
