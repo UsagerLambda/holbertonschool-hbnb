@@ -16,7 +16,7 @@ class User(BaseModel):
         self.place = []
 
     def add_place(self, place):
-        self.places.append(place)
+        self.place.append(place)
 
     def register(self):
         pass
