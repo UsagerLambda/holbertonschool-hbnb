@@ -13,6 +13,10 @@ class User(BaseModel):
         self.last_name = last_name
         self.email = email
         self.is_admin = is_admin
+        self.place = []
+
+    def add_place(self, place):
+        self.places.append(place)
 
     def register(self):
         pass
