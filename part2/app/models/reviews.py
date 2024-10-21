@@ -1,27 +1,21 @@
-from datetime import datetime
-import uuid
+from baseModel import BaseModel
 
-class Review:
-    def __init__(self, user_id, place_id, rating, comment):
-        self.id = str(uuid.uuid4())
-        self.user_id = user_id
-        self.place_id = place_id
+class Review(BaseModel):
+    def __init__(self, text, rating, place, user):
+        super().__init__()
+        if not (1 <= rating <= 5):
+            raise ValueError("Rating must be between 1 and 5")
+
+        self.text = text
         self.rating = rating
-        self.comment = comment
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        self.place = place
+        self.user = user
 
     def createReview(self):
         pass
 
-
-    def updateReview(self):
-        self.updated_at = datetime.now()
-
-
     def deleteReview(self):
         pass
-
 
     def listReview(self):
         pass
