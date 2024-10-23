@@ -1,10 +1,7 @@
 from app.persistence.repository import InMemoryRepository
 from app.models.users import User
-<<<<<<< HEAD
-=======
 from app.models.places import Place
 from app.models.amenities import Amenity
->>>>>>> 694edfc62db2385b0cff05c54d3ae6cebb115ab9
 from app.models.reviews import Review
 
 class HBnBFacade:
@@ -37,36 +34,6 @@ class HBnBFacade:
         return self.user_repo.get(user_id)
 
     def get_user_by_email(self, email):
-<<<<<<< HEAD
-        return self.user_repo.get_by_attribute('email', email)
-    
-    def create_review(self, review_data):
-    # Placeholder for logic to create a review, including validation for user_id, place_id, and rating
-        review = Review(**review_data)
-        self.review_repo.add(review)
-        return review
-
-    def get_review(self, review_id):
-    # Placeholder for logic to retrieve a review by ID
-        return self.review_repo.get_by_attribute('id', review_id)
-
-    def get_all_reviews(self):
-    # Placeholder for logic to retrieve all reviews
-        return self.review_repo.get_all
-
-    def get_reviews_by_place(self, place_id):
-    # Placeholder for logic to retrieve all reviews for a specific place
-        return self.review_repo.get_by_attribute('review', place_id)
-
-    def update_review(self, review_id, review_data):
-    # Placeholder for logic to update a review
-        return self.review_repo.update(review_id, review_data)
-
-    def delete_review(self, review_id):
-    # Placeholder for logic to delete a review
-        return self.review_repo.delete(review_id)
-=======
-        """Retrieve user by mail."""
         return self.user_repo.get_by_attribute('email', email)
 
     def get_all_users(self):
@@ -90,6 +57,43 @@ class HBnBFacade:
         "is_admin": user.is_admin
         })
         return user
+    #############################################################################################################
+#REVIEW BLOCK####################################################################################################
+    def create_review(self, review_data):
+        """Create a review"""
+        review = Review(**review_data)
+        self.review_repo.add(review)
+        return review
 
-##########################################################################################################################
->>>>>>> 694edfc62db2385b0cff05c54d3ae6cebb115ab9
+    def get_review(self, review_id):
+        """Retrieve a review with its ID"""
+        return self.review_repo.get( review_id)
+
+    def get_all_reviews(self):
+        """Retrieve all users"""
+        return self.review_repo.get_all()
+
+    def get_reviews_by_place(self, place_id):
+        """Retrieve reviews by place"""
+        return self.review_repo.get_by_attribute('review', place_id)
+
+    def update_review(self, review_id, review_data):
+        """Update a review"""
+        review = self.review_repo.get(review_id)
+        if not review:
+            return None
+        review.rating = review_data.get('rating', review.rating)
+        review.comment = review_data.get('comment', review.comment)
+        review.user_id = review_data.get('user_id', review.user_id)
+        self.review_repo.update(review_id, {
+            "rating": review.rating,
+            "comment": review.comment,
+            "user_id": review.user_id,
+        })
+        return review
+         
+
+    def delete_review(self, review_id):
+        """Delete a Review"""
+        return self.review_repo.delete(review_id)
+    ###########################################################################################################
