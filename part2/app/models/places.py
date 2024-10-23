@@ -1,7 +1,7 @@
 from app.models.baseModel import BaseModel
 
 class Place(BaseModel):
-    def __init__(self, title, description, price, latitude, longitude, owner):
+    def __init__(self, title, description, price, latitude, longitude, owner_id):
         super().__init__()
         valid_place_description = self.place_length(description)
         if isinstance(valid_place_description, tuple):
@@ -18,10 +18,22 @@ class Place(BaseModel):
         self.price = price
         self.latitude = latitude
         self.longitude = longitude
-        self.owner = owner
+        self.owner_id = owner_id
         self.reviews = []
         self.amenities = []
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'price': self.price,
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'owner_id': self.owner_id,
+            'reviews': [review.to_dict() for review in self.reviews],
+            'amenities': self.amenities
+        }
 
     def add_review(self, review):
         if review.user and review.place:
