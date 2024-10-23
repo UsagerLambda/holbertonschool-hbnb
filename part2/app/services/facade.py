@@ -6,14 +6,6 @@ from app.models.reviews import Review
 
 
 class HBnBFacade:
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        """Override __new__ to control instance creation (Singleton)."""
-        if cls._instance is None:
-            cls._instance = super().__new__(cls, *args, **kwargs)
-        return cls._instance
-
     def __init__(self):
         if not hasattr(self, "user_repo"):
             self.user_repo = InMemoryRepository()
@@ -64,23 +56,13 @@ class HBnBFacade:
 
     def create_place(self, place_data):
         """Create an place."""
-        required_keys = ['title',
-                         'description',
-                         'price',
-                         'latitude',
-                         'longitude',
-                         'owner_id']
-        if not all(key in place_data for key in required_keys):
-            raise ValueError("Missing required fields: " + ", ".join(required_keys))
         try:
             place = Place(**place_data)
             self.place_repo.add(place)
             return place.to_dict()
-        except ValueError as e:
-            # Gestion des erreurs de validation
+        except (ValueError, TypeError) as e:
             raise ValueError(f"Failed to create place: {str(e)}")
         except Exception as e:
-            # Gestion des autres erreurs
             raise RuntimeError(f"An error occurred while creating the place: {str(e)}")
 
     def get_place(self, place_id):
@@ -95,25 +77,10 @@ class HBnBFacade:
         if not place:
             return None
 
-        place.title = place_data.get("title", place.title)
-        place.description = place_data.get("description", place.description)
-        place.price = place_data.get("price", place.price)
-        place.latitude = place_data.get("latitude", place.latitude)
-        place.longitude = place_data.get("longitude", place.longitude)
-        place.owner_id = place_data.get("owner_id", place.owner_id)
-        place.reviews = place_data.get("reviews", place.reviews)
-        place.amenities = place_data.get("amenities", place.amenities)
-
-        self.place_repo.update(place_id, {
-            "title": place.title,
-            "description": place.description,
-            "price": place.price,
-            "latitude": place.latitude,
-            "longitude": place.longitude,
-            "owner_id": place.owner_id,
-            "reviews": place.reviews,
-            "amenities": place.amenities
-        })
-        return place
+        try:
+            self.place_repo.update(place_id, place_data)
+            return place
+        except Exception as e:
+            raise RuntimeError(f"An error occurred while updating the place: {str(e)}")
 
 # ########################################################################################################################

@@ -1,5 +1,5 @@
 from flask_restx import Namespace, Resource, fields
-from app.services.facade import HBnBFacade
+from app.services import facade
 
 api = Namespace('places', description='Place operations')
 
@@ -28,9 +28,6 @@ place_model = api.model('Place', {
     'amenities': fields.List(fields.String, required=True, description="List of amenities ID's")
 })
 
-facade = HBnBFacade()
-
-
 @api.route('/')
 class PlaceList(Resource):
     @api.expect(place_model)
@@ -53,11 +50,7 @@ class PlaceList(Resource):
             return {'message': 'No places found'}, 404
 
         # Return a list of users in JSON format
-        return [{'id': place.id,
-                 'title': place.title,
-                 'description': place.description,
-                 'price': place.price,
-                 'owner_id': place.owner_id} for place in places], 200
+        return [place.to_dict() for place in places], 200
 
 
 @api.route('/<place_id>')
@@ -70,11 +63,7 @@ class PlaceResource(Resource):
         if not place:
             return {'error': 'User not found'}, 404
 
-        return {'id': place.id,
-                'title': place.title,
-                'description': place.description,
-                'price': place.price,
-                'owner_id': place.owner_id}, 200
+        return place.to_dict(), 200
 
     @api.expect(place_model)
     @api.response(200, 'Place updated successfully')
@@ -84,15 +73,8 @@ class PlaceResource(Resource):
         """Update a place's information"""
         place_data = api.payload
 
-        # Récupérer et mettre à jour les informations de l'utilisateur
         updated_place = facade.update_place(place_id, place_data)
         if not updated_place:
             return {'error': 'Place not found'}, 404
 
-        return {
-            'id': updated_place.id,
-            'title': updated_place.title,
-            'description': updated_place.description,
-            'price': updated_place.price,
-            'owner_id': updated_place.owner_id
-        }, 200
+        return updated_place.to_dict(), 200
