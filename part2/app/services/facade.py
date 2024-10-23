@@ -95,7 +95,13 @@ class HBnBFacade:
 
     def delete_review(self, review_id):
         """Delete a Review"""
-        return self.review_repo.delete(review_id)
+        review = self.review_repo.get(review_id)
+
+        if not review:
+            raise ValueError("Review ID not found")
+        
+        deleted = self.review_repo.delete(review_id)
+        return deleted
     ###########################################################################################################
 # ####PLACES##############################################################################################################
 
