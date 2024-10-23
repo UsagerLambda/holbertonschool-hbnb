@@ -30,6 +30,7 @@ place_model = api.model('Place', {
 
 facade = HBnBFacade()
 
+
 @api.route('/')
 class PlaceList(Resource):
     @api.expect(place_model)
@@ -44,7 +45,6 @@ class PlaceList(Resource):
         except ValueError as e:
             return {"message": str(e)}, 400
 
-
     @api.response(200, 'List of places retrieved successfully')
     def get(self):
         """Retrieve a list of all places"""
@@ -53,7 +53,12 @@ class PlaceList(Resource):
             return {'message': 'No places found'}, 404
 
         # Return a list of users in JSON format
-        return [{'id': place.id, 'title': place.title, 'description': place.description, 'price': place.price, 'owner_id': place.owner_id} for place in places], 200
+        return [{'id': place.id,
+                 'title': place.title,
+                 'description': place.description,
+                 'price': place.price,
+                 'owner_id': place.owner_id} for place in places], 200
+
 
 @api.route('/<place_id>')
 class PlaceResource(Resource):
@@ -64,7 +69,12 @@ class PlaceResource(Resource):
         place = facade.get_place(place_id)
         if not place:
             return {'error': 'User not found'}, 404
-        return {'id': place.id, 'title': place.title, 'description': place.description, 'price': place.price, 'owner_id': place.owner_id}, 200
+
+        return {'id': place.id,
+                'title': place.title,
+                'description': place.description,
+                'price': place.price,
+                'owner_id': place.owner_id}, 200
 
     @api.expect(place_model)
     @api.response(200, 'Place updated successfully')

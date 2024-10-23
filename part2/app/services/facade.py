@@ -4,10 +4,10 @@ from app.models.places import Place
 from app.models.amenities import Amenity
 from app.models.reviews import Review
 
+
 class HBnBFacade:
     _instance = None
 
-    # méthode spéciale __new__ garantit que seule une instance de HBnBFacade sera créée
     def __new__(cls, *args, **kwargs):
         """Override __new__ to control instance creation (Singleton)."""
         if cls._instance is None:
@@ -21,7 +21,7 @@ class HBnBFacade:
             self.review_repo = InMemoryRepository()
             self.amenity_repo = InMemoryRepository()
 
-########USER##############################################################################################################
+# ######USER##############################################################################################################
 
     def create_user(self, user_data):
         """Create an user."""
@@ -52,19 +52,24 @@ class HBnBFacade:
         user.email = user_data.get("email", user.email)
 
         self.user_repo.update(user_id, {
-        "first_name": user.first_name,
-        "last_name": user.last_name,
-        "email": user.email,
-        "is_admin": user.is_admin
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": user.email,
+            "is_admin": user.is_admin
         })
         return user
 
-##########################################################################################################################
-######PLACES##############################################################################################################
+# ########################################################################################################################
+# ####PLACES##############################################################################################################
 
     def create_place(self, place_data):
         """Create an place."""
-        required_keys = ['title', 'description', 'price', 'latitude', 'longitude', 'owner_id']
+        required_keys = ['title',
+                         'description',
+                         'price',
+                         'latitude',
+                         'longitude',
+                         'owner_id']
         if not all(key in place_data for key in required_keys):
             raise ValueError("Missing required fields: " + ", ".join(required_keys))
         try:
@@ -80,7 +85,6 @@ class HBnBFacade:
 
     def get_place(self, place_id):
         return self.place_repo.get(place_id)
-
 
     def get_all_places(self):
         """Retrieve all users."""
@@ -112,4 +116,4 @@ class HBnBFacade:
         })
         return place
 
-##########################################################################################################################
+# ########################################################################################################################
