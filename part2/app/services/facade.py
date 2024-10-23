@@ -65,43 +65,30 @@ class HBnBFacade:
         self.review_repo.add(review)
         return review
 
+
     def get_review(self, review_id):
         """Retrieve a review with its ID"""
         return self.review_repo.get( review_id)
+
 
     def get_all_reviews(self):
         """Retrieve all users"""
         return self.review_repo.get_all()
 
+
     def get_reviews_by_place(self, place_id):
         """Retrieve reviews by place"""
         return self.review_repo.get_by_attribute('review', place_id)
 
+
     def update_review(self, review_id, review_data):
         """Update a review"""
-        review = self.review_repo.get(review_id)
-        if not review:
-            return None
-        review.rating = review_data.get('rating', review.rating)
-        review.comment = review_data.get('comment', review.comment)
-        review.user_id = review_data.get('user_id', review.user_id)
-        self.review_repo.update(review_id, {
-            "rating": review.rating,
-            "comment": review.comment,
-            "user_id": review.user_id,
-        })
-        return review
+        self.review_repo.update(review_id)
          
 
     def delete_review(self, review_id):
         """Delete a Review"""
-        review = self.review_repo.get(review_id)
-
-        if not review:
-            raise ValueError("Review ID not found")
-        
-        deleted = self.review_repo.delete(review_id)
-        return deleted
+        self.review_repo.delete(review_id)
     ###########################################################################################################
 # ####PLACES##############################################################################################################
 
