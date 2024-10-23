@@ -22,4 +22,7 @@ class User(BaseModel):
 
 
     def updateProfile(self, data):
-        self.update(data)
+        if isinstance(data, dict):
+            self.update(data)
+        else:
+            raise TypeError("Les données passées doivent être un dictionnaire.")
