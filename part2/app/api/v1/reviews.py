@@ -18,32 +18,22 @@ class ReviewList(Resource):
     @api.response(400, 'Invalid input data')
     def post(self):
         """Register a new review"""
-        try:
-            review_data = api.payload
-            creating_review = facade.create_review(review_data)
-            if creating_review:
-                return {'review_id': creating_review.id, 'reviewdata': review_data}, 201
-            else:
-                return {'message': 'Invalid input data'}, 400
-        except Exception as e:
-            return {'message': str(e)}, 400
+        review_data = api.payload
+        creating_review = facade.create_review(review_data)
+        if not creating_review:
+                return {'error': 'Invalid input data'}, 400
+        return creating_review.to_dict(), 200
     
 
     @api.response(200, 'List of reviews retrieved successfully')
     def get(self):
         """Retrieve a list of all reviews"""
         get_all_reviews = facade.get_all_reviews()
-        review_list = []
-        for review in get_all_reviews:
-            review_list.append({
-                'review_id': review.id,
-                'user_id': review.user_id,
-                'place_id': review.place_id,
-                'comment': review.comment,
-                'rating': review.rating,
-            })
-        return ({'get_all_reviews' : review_list}), 200
+        if not get_all_reviews:
+             return {'error': 'No reviews found'}, 404
         
+        return [review.to_dict() for review in get_all_reviews], 200
+
 
 @api.route('/<review_id>')
 class ReviewResource(Resource):
@@ -54,15 +44,7 @@ class ReviewResource(Resource):
         review = facade.get_review(review_id)
         if not review:
             return {'error': 'Review not found'}, 404
-        
-        review_data = {
-            'review_id': review.id,
-            'user_id': review.user_id,
-            'place_id': review.place_id,
-            'comment': review.comment,
-            'rating': review.rating,
-        }
-        return {'review_data':'Review details retrieved successfully'}, 200
+        return review.to_dict(), 200
     
 
     @api.expect(review_model)
@@ -98,8 +80,10 @@ class PlaceReviewList(Resource):
     @api.response(404, 'Place not found')
     def get(self, place_id):
         """Get all reviews for a specific place"""
+        review_data = api.payload
+
         reviews = facade.get_reviews_by_place(place_id)
-        if reviews is None:
+        if not reviews:
             return {'error': 'Place not found'}, 404
         
         reviews_list = [review.to_dict() for review in reviews]
