@@ -10,3 +10,12 @@ class Review(BaseModel):
         self.rating = rating
         self.place = place
         self.user = user
+
+def to_dict(self):
+    return {
+
+        "text": self.text,
+        "rating": self.rating,
+        "place_id": self.rating,
+        "user_id": self.user
+    }
