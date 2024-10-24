@@ -38,16 +38,7 @@ class HBnBFacade:
         if not user:
             return None
 
-        user.first_name = user_data.get("first_name", user.first_name)
-        user.last_name = user_data.get("last_name", user.last_name)
-        user.email = user_data.get("email", user.email)
-
-        self.user_repo.update(user_id, {
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "email": user.email,
-            "is_admin": user.is_admin
-        })
+        self.user_repo.update(user_id, user_data)
         return user
     #############################################################################################################
 #REVIEW BLOCK####################################################################################################
@@ -110,6 +101,8 @@ class HBnBFacade:
         try:
             self.place_repo.update(place_id, place_data)
             return place
+        except ValueError as e:
+            raise
         except Exception as e:
             raise RuntimeError(f"An error occurred while updating the place: {str(e)}")
 
