@@ -30,6 +30,7 @@ class UserList(Resource):
         except Exception as e:
             return {'error': str(e)}, 400
 
+
     @api.response(200, 'Users retrieved successfully')
     def get(self):
         """Retrieve a list of all users"""
@@ -51,6 +52,7 @@ class UserResource(Resource):
         if not user:
             return {'error': 'User not found'}, 404
         return user.to_dict(), 200
+
 
     @api.expect(user_model, validate=True)
     @api.response(200, 'User successfully updated')
