@@ -44,9 +44,14 @@ class HBnBFacade:
 #REVIEW BLOCK####################################################################################################
     def create_review(self, user, place, review_data):
         """Create a review"""
-        review = Review(user=user, place=place, **review_data)
-        self.review_repo.add(review)
-        return review
+        try:
+            user_id = user.id
+            place_id = place.id
+            review = Review(user=user, place=place, user_id=user_id, place_id=place_id, **review_data)
+            self.review_repo.add(review)
+            return review
+        except ValueError as e:
+            raise ValueError(f"Failed to create review: {str(e)}")
 
 
     def get_review(self, review_id):

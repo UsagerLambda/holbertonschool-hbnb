@@ -20,14 +20,16 @@ class ReviewList(Resource):
     def post(self):
         """Register a new review"""
         review_data = api.payload
+
         place_id = review_data.pop('place_id')
         user_id = review_data.pop('user_id')
+
         place = facade.get_place(place_id)
         user = facade.get_user(user_id)
-        review = Review(place=place, place_id=place_id, user=user, user_id=user_id, **review_data)
-        self.review_repo.add(review)
+
+        review = facade.create_review(user, place, review_data)
         return review.to_dict(), 201
-    
+
 
     @api.response(200, 'List of reviews retrieved successfully')
     def get(self):
@@ -35,7 +37,7 @@ class ReviewList(Resource):
         get_all_reviews = facade.get_all_reviews()
         if not get_all_reviews:
              return {'error': 'No reviews found'}, 404
-        
+
         return [review.to_dict() for review in get_all_reviews], 200
 
 
@@ -49,18 +51,19 @@ class ReviewResource(Resource):
         if not review:
             return {'error': 'Review not found'}, 404
         return review.to_dict(), 200
-    
+
 
     @api.expect(review_model)
     @api.response(200, 'Review updated successfully')
     @api.response(404, 'Review not found')
     @api.response(400, 'Invalid input data')
-    def put(self, review_id):
+    def put(self, review_id):  ##modif
         """Update a review's information"""
+        review_data = api.payload
         review = facade.get_review(review_id)
         if not review:
             return {'error': 'Review not found'}, 404
-        facade.update_review(review_id)
+        facade.update_review(review_id, review_data)  # Passer les nouvelles données ici
 
         return {'message': 'Review updated successfully'}, 200
 
@@ -74,7 +77,7 @@ class ReviewResource(Resource):
         if not review:
             return {'error': 'Review not found'}, 404
         facade.delete_review(review_id)
-        
+
         return {'message': 'Review deleted successfully'}, 200
 
 
@@ -89,6 +92,6 @@ class PlaceReviewList(Resource):
         reviews = facade.get_reviews_by_place(place_id)
         if not reviews:
             return {'error': 'Place not found'}, 404
-        
+
         reviews_list = [review.to_dict() for review in reviews]
         return {'reviews': reviews_list}, 200
