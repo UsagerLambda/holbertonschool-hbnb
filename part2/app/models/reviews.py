@@ -1,7 +1,7 @@
 from app.models.baseModel import BaseModel
 
 class Review(BaseModel):
-    def __init__(self, text, rating, place, user):
+    def __init__(self, text, rating, place, user, user_id):
         super().__init__()
         if not (1 <= rating <= 5):
             raise ValueError("Rating must be between 1 and 5")
