@@ -7,6 +7,7 @@ class Review(BaseModel):
             raise ValueError("Rating must be between 1 and 5")
 
         self.text = text
+        self.user_id = user_id
         self.rating = rating
         self.place = place
         self.user = user
