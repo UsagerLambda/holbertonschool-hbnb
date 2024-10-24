@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from app.models.reviews import Review
 
 api = Namespace('reviews', description='Review operations')
 
@@ -19,10 +20,13 @@ class ReviewList(Resource):
     def post(self):
         """Register a new review"""
         review_data = api.payload
-        creating_review = facade.create_review(review_data)
-        if not creating_review:
-                return {'error': 'Invalid input data'}, 400
-        return creating_review.to_dict(), 200
+        place_id = review_data.pop('place_id')
+        user_id = review_data.pop('user_id')
+        place = facade.get_place(place_id)
+        user = facade.get_user(user_id)
+        review = Review(place=place, place_id=place_id, user=user, user_id=user_id, **review_data)
+        self.review_repo.add(review)
+        return review.to_dict(), 201
     
 
     @api.response(200, 'List of reviews retrieved successfully')

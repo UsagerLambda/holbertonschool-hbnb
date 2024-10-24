@@ -42,9 +42,9 @@ class HBnBFacade:
         return user
     #############################################################################################################
 #REVIEW BLOCK####################################################################################################
-    def create_review(self, review_data):
+    def create_review(self, user, place, review_data):
         """Create a review"""
-        review = Review(**review_data)
+        review = Review(user=user, place=place, **review_data)
         self.review_repo.add(review)
         return review
 

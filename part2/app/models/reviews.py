@@ -23,3 +23,11 @@ def to_dict(self):
         "user": self.user,
         "user_id": self.user_id
     }
+
+
+def __init__(self, place, place_id, user, user_id, text):
+        self.place = place
+        self.place_id = place_id
+        self.user = user
+        self.user_id = user_id
+        self.text = text
