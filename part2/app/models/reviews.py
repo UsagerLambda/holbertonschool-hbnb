@@ -7,17 +7,19 @@ class Review(BaseModel):
             raise ValueError("Rating must be between 1 and 5")
 
         self.text = text
-        self.user_id = user_id
         self.rating = rating
         self.place = place
-        self.place = place_id
+        self.place_id = place_id
         self.user = user
+        self.user_id = user_id
 
 def to_dict(self):
     return {
 
         "text": self.text,
         "rating": self.rating,
-        "place_id": self.rating,
-        "user_id": self.user
+        "place": self.place,
+        "place_id": self.place_id,
+        "user": self.user,
+        "user_id": self.user_id
     }
