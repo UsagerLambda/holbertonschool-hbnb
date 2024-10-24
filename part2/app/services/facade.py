@@ -50,6 +50,12 @@ class HBnBFacade:
         try:
             place = Place(**place_data)
             self.place_repo.add(place)
+
+            user = self.user_repo.get(place.owner_id)
+            if user:
+                user.add_place(place)
+                self.user_repo.update(user.id, user.to_dict())
+
             return place.to_dict()
         except (ValueError, TypeError) as e:
             raise ValueError(f"Failed to create place: {str(e)}")
