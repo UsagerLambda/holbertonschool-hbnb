@@ -31,3 +31,10 @@ def __init__(self, place, place_id, user, user_id, text):
         self.user = user
         self.user_id = user_id
         self.text = text
+
+def update(self, data):
+     if 'text' in data:
+          valid_text = self.text_length(data['text'])
+          if isinstance(valid_text, tuple):
+               raise ValueError(valid_text[0])
+          self.text = data['text'] 
