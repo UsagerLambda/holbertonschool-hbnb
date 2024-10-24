@@ -16,13 +16,9 @@ class BaseModel:
                 setattr(self, key, value)
         self.save()
 
-    def name_length(self, name):
-        if len(name) > 50:
-            return (name + " ne doit pas dépasser 50 caractères."), 403
+    def name_length(self, name, field_name, value):
+        if not name:
+            raise ValueError(f"{field_name} cannot be empty")
+        if len(name) > value:
+            raise ValueError(f"{field_name} must not exceed {value} characters")
         return name
-
-    def place_length(self, place):
-        if len(place) > 100:
-            return (place + " ne doit pas dépasser 100 caractères."), 403
-        return place
-
