@@ -140,5 +140,10 @@ class HBnBFacade:
 
 
     def update_amenity(self, amenity_id, amenity_data):
-        return self.amenity_repo.update(amenity_id, amenity_data)
+        amenity = self.amenity_repo.get(amenity_id)  # Vérifiez que l'amenity est trouvé ici
+        if not amenity:
+            return None
+
+        amenity.update(amenity_data)  # Mettez à jour les données
+        return amenity
 #########################################################################################################################
