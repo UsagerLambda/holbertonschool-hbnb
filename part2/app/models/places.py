@@ -21,7 +21,7 @@ class Place(BaseModel):
             'latitude': self.latitude,
             'longitude': self.longitude,
             'owner_id': self.owner_id,
-            'reviews': [review.to_dict() for review in self.reviews],
+            'reviews': [review.to_dict() for review in self.reviews],  # À vérifier
             'amenities': self.amenities
         }
 
@@ -73,8 +73,8 @@ class Place(BaseModel):
             raise ValueError("Longitude must be between -180 and 180")
         self._longitude = value
 
-    def add_review(self, review):
-        if review.user and review.place:
+    def add_review(self, review):  # A FIX
+        if review.owner_id and review.place_id:
             self.reviews.append(review)
 
     def add_amenity(self, amenity):

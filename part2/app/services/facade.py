@@ -13,7 +13,9 @@ class HBnBFacade:
             self.review_repo = InMemoryRepository()
             self.amenity_repo = InMemoryRepository()
 
+
 # ######USER##############################################################################################################
+
 
     def create_user(self, user_data):
         """Create an user."""
@@ -40,40 +42,50 @@ class HBnBFacade:
 
         self.user_repo.update(user_id, user_data)
         return user
+
+
     #############################################################################################################
 #REVIEW BLOCK####################################################################################################
-    def create_review(self, review_data):
-        """Create a review"""
-        review = Review(**review_data)
-        self.review_repo.add(review)
-        return review
 
+
+    def create_review(self, review_data):
+        try:
+            review = Review(**review_data)
+            self.review_repo.add(review)
+
+            user = self.user_repo.get(review.owner_id)
+            if user:
+                user.add_place(review)
+                self.user_repo.update(user.id, user.to_dict())
+
+            return review.to_dict()
+        except (ValueError, TypeError) as e:
+            raise ValueError(f"Failed to create place: {str(e)}")
+        except Exception as e:
+            raise RuntimeError(f"An error occurred while creating the place: {str(e)}")
 
     def get_review(self, review_id):
-        """Retrieve a review with its ID"""
-        return self.review_repo.get( review_id)
-
+        return self.review_repo.get(review_id)
 
     def get_all_reviews(self):
-        """Retrieve all users"""
         return self.review_repo.get_all()
 
-
     def get_reviews_by_place(self, place_id):
-        """Retrieve reviews by place"""
-        return self.review_repo.get_by_attribute('review', place_id)
-
+        # Placeholder for logic to retrieve all reviews for a specific place
+        pass
 
     def update_review(self, review_id, review_data):
-        """Update a review"""
-        self.review_repo.update(review_id)
-         
+        # Placeholder for logic to update a review
+        pass
 
     def delete_review(self, review_id):
-        """Delete a Review"""
-        self.review_repo.delete(review_id)
+        # Placeholder for logic to delete a review
+        pass
+
+
     ###########################################################################################################
 # ####PLACES##############################################################################################################
+
 
     def create_place(self, place_data):
         """Create an place."""
@@ -112,9 +124,11 @@ class HBnBFacade:
         except Exception as e:
             raise RuntimeError(f"An error occurred while updating the place: {str(e)}")
 
+
 # ########################################################################################################################
 #AMENITIES BLOCK##########################################################################################################
-    
+
+
     # Method for fetching a user by email
     def get_user_by_email(self, email):
         return self.user_repo.get_by_attribute('email', email)
@@ -135,5 +149,15 @@ class HBnBFacade:
 
 
     def update_amenity(self, amenity_id, amenity_data):
-        return self.amenity_repo.update(amenity_id, amenity_data)
+        """Met à jour un amenity existant."""
+        amenity = self.amenity_repo.get(amenity_id)
+        if not amenity:
+            raise ValueError(f"Amenity with id {amenity_id} not found.")
+
+        amenity.update(amenity_data)
+
+        self.amenity_repo.update(amenity_id, amenity.to_dict())
+        return amenity
+
+
 #########################################################################################################################
