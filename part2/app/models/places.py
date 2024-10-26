@@ -21,7 +21,7 @@ class Place(BaseModel):
             'latitude': self.latitude,
             'longitude': self.longitude,
             'owner_id': self.owner_id,
-            'reviews': [review.to_dict() for review in self.reviews],  # À vérifier
+            'reviews': [review.to_dict() if hasattr(review, 'to_dict') else review for review in self.reviews],
             'amenities': self.amenities
         }
 
@@ -73,10 +73,14 @@ class Place(BaseModel):
             raise ValueError("Longitude must be between -180 and 180")
         self._longitude = value
 
-    def add_review(self, review):  # A FIX
+    def add_review(self, review):
         if review.owner_id and review.place_id:
             self.reviews.append(review)
 
     def add_amenity(self, amenity):
         if amenity not in self.amenities:
             self.amenities.append(amenity)
+
+    def remove_review(self, review_id):
+        """Remove a review by ID from the place's reviews list."""
+        self.reviews = [review for review in self.reviews if (review.id if hasattr(review, 'id') else review.get('id')) != review_id]

@@ -53,15 +53,24 @@ class ReviewResource(Resource):
     @api.response(400, 'Invalid input data')
     def put(self, review_id):
         """Update a review's information"""
-        # Placeholder for the logic to update a review by ID
-        pass
+        review_data = api.payload
+
+        updated_review = facade.update_review(review_id, review_data)
+        if not updated_review:
+            return {'error': 'Place not found'}, 404
+
+        return updated_review.to_dict(), 200
 
     @api.response(200, 'Review deleted successfully')
     @api.response(404, 'Review not found')
     def delete(self, review_id):
         """Delete a review"""
-        # Placeholder for the logic to delete a review
-        pass
+        review = facade.delete_review(review_id)
+        if not review:
+            return {'error': 'Review not found'}, 404
+
+        return {"message": "Review deleted successfully"}, 200
+
 
 @api.route('/places/<place_id>/reviews')
 class PlaceReviewList(Resource):
@@ -69,5 +78,9 @@ class PlaceReviewList(Resource):
     @api.response(404, 'Place not found')
     def get(self, place_id):
         """Get all reviews for a specific place"""
-        # Placeholder for logic to return a list of reviews for a place
-        pass
+        reviews = facade.get_reviews_by_place(place_id)
+        # Vérifier si des critiques existent
+        if not reviews:
+            return {'message': 'No reviews found for this place'}, 404
+        # Retourner les critiques sous forme de liste
+        return [review.to_dict() for review in reviews], 200

@@ -50,19 +50,38 @@ class HBnBFacade:
 
     def create_review(self, review_data):
         try:
+            # Vérifier si place_id et owner_id sont présents dans review_data
+            place_id = review_data.get('place_id')
+            owner_id = review_data.get('owner_id')
+
+            if not place_id:
+                raise ValueError("place_id is required")
+            if not owner_id:
+                raise ValueError("owner_id is required")
+
+            # Vérifier si le place existe
+            place = self.place_repo.get(place_id)
+            if not place:
+                raise ValueError(f"Place with id {place_id} does not exist")
+
+            # Vérifier si l'utilisateur (owner) existe
+            user = self.user_repo.get(owner_id)
+            if not user:
+                raise ValueError(f"User with id {owner_id} does not exist")
+
+            # Créer la review
             review = Review(**review_data)
             self.review_repo.add(review)
 
-            user = self.user_repo.get(review.owner_id)
-            if user:
-                user.add_place(review)
-                self.user_repo.update(user.id, user.to_dict())
+            # Ajouter la review au place
+            place.add_review(review)
+            self.place_repo.update(place.id, place.to_dict())
 
             return review.to_dict()
         except (ValueError, TypeError) as e:
-            raise ValueError(f"Failed to create place: {str(e)}")
+            raise ValueError(f"Failed to create review: {str(e)}")
         except Exception as e:
-            raise RuntimeError(f"An error occurred while creating the place: {str(e)}")
+            raise RuntimeError(f"An error occurred while creating the review: {str(e)}")
 
     def get_review(self, review_id):
         return self.review_repo.get(review_id)
@@ -71,16 +90,68 @@ class HBnBFacade:
         return self.review_repo.get_all()
 
     def get_reviews_by_place(self, place_id):
-        # Placeholder for logic to retrieve all reviews for a specific place
-        pass
+        return [review for review in self.review_repo.get_all() if review.place_id == place_id]
 
     def update_review(self, review_id, review_data):
-        # Placeholder for logic to update a review
-        pass
+        review = self.review_repo.get(review_id)
+        if not review:
+            return None
+
+        # Vérifie que le champ l'owner_id n'est pas vide
+        owner_id = review_data.get('owner_id')
+        if owner_id is None:
+            raise ValueError("owner_id is required to update the place")
+
+        # Vérifie que le champ l'place_id n'est pas vide
+        place_id = review_data.get('place_id')
+        if place_id is None:
+            raise ValueError("place_id is required to update the place")
+
+        # Vérifie que l'owner_id existe
+        owner = self.user_repo.get(owner_id)
+        if not owner:
+            raise ValueError(f"Owner with id {owner_id} does not exist")
+
+        # Vérifie que l'owner_id existe
+        place = self.place_repo.get(place_id)
+        if not place:
+            raise ValueError(f"Place with id {place_id} does not exist")
+
+        try:
+            self.review_repo.update(review_id, review_data)
+            if place:
+                # Retire l'ancienne review et met à jour la liste des reviews
+                place.remove_review(review_id)  # Cela retirera l'ancienne version
+                # Ajoute la review mise à jour à la liste
+                updated_review = self.review_repo.get(review_id)  # Récupère la review mise à jour
+                place.add_review(updated_review)  # Ajoute la nouvelle version
+                # Met à jour le place dans le repository
+                self.place_repo.update(place.id, place.to_dict())
+
+            return review
+        except ValueError as e:
+            raise
+        except Exception as e:
+            raise RuntimeError(f"An error occurred while updating the review: {str(e)}")
 
     def delete_review(self, review_id):
-        # Placeholder for logic to delete a review
-        pass
+        # Vérifier si la review existe
+        review = self.review_repo.get(review_id)
+        if not review:
+            raise ValueError(f"Review with id {review_id} does not exist")
+
+        # Récupérer le place associé à cette review
+        place = self.place_repo.get(review.place_id)
+        if place:
+            # Retirer la review de la liste des reviews de ce place
+            place.remove_review(review_id)
+            # Mettre à jour le place dans le repository
+            self.place_repo.update(place.id, place.to_dict())
+
+        # Supprimer la review
+        self.review_repo.delete(review_id)
+        return {"message": "Review deleted successfully"}, 200
+
 
 
     ###########################################################################################################
@@ -90,13 +161,23 @@ class HBnBFacade:
     def create_place(self, place_data):
         """Create an place."""
         try:
+            # Vérifier si l'owner_id est présent dans place_data
+            owner_id = place_data.get('owner_id')
+            if not owner_id:
+                raise ValueError("owner_id is required")
+
+            # Vérifier si l'utilisateur existe
+            user = self.user_repo.get(owner_id)
+            if not user:
+                raise ValueError(f"User with id {owner_id} does not exist")
+
+            # Créer l'objet Place
             place = Place(**place_data)
             self.place_repo.add(place)
 
-            user = self.user_repo.get(place.owner_id)
-            if user:
-                user.add_place(place)
-                self.user_repo.update(user.id, user.to_dict())
+            # Ajouter le place à l'utilisateur
+            user.add_place(place)
+            self.user_repo.update(user.id, user.to_dict())
 
             return place.to_dict()
         except (ValueError, TypeError) as e:
@@ -115,6 +196,16 @@ class HBnBFacade:
         place = self.place_repo.get(place_id)
         if not place:
             return None
+
+        # Vérifie que le champ l'owner_id n'est pas vide
+        owner_id = place_data.get('owner_id')
+        if owner_id is None:
+            raise ValueError("owner_id is required to update the place")
+
+        # Vérifie que l'owner_id existe
+        owner = self.user_repo.get(owner_id)
+        if not owner:
+            raise ValueError(f"Owner with id {owner_id} does not exist")
 
         try:
             self.place_repo.update(place_id, place_data)
