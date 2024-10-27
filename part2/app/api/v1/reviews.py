@@ -3,7 +3,6 @@ from app.services import facade
 
 api = Namespace('reviews', description='Review operations')
 
-# Define the review model for input validation and documentation
 review_model = api.model('Review', {
     'text': fields.String(required=True, description='Text of the review'),
     'rating': fields.Integer(required=True, description='Rating of the place (1-5)'),
@@ -32,7 +31,6 @@ class ReviewList(Resource):
         if not reviews:
             return {'message': 'No reviews found'}, 404
 
-        # Return a list of users in JSON format
         return [review.to_dict() for review in reviews], 200
 
 @api.route('/<review_id>')
@@ -79,8 +77,8 @@ class PlaceReviewList(Resource):
     def get(self, place_id):
         """Get all reviews for a specific place"""
         reviews = facade.get_reviews_by_place(place_id)
-        # Vérifier si des critiques existent
+
         if not reviews:
             return {'message': 'No reviews found for this place'}, 404
-        # Retourner les critiques sous forme de liste
+
         return [review.to_dict() for review in reviews], 200

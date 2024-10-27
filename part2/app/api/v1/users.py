@@ -3,7 +3,6 @@ from app.services import facade
 
 api = Namespace('users', description='User operations')
 
-# Define the user model for input validation and documentation
 user_model = api.model('User', {
     'first_name': fields.String(required=True, description='First name of the user'),
     'last_name': fields.String(required=True, description='Last name of the user'),
@@ -38,7 +37,6 @@ class UserList(Resource):
         if not users:
             return {'message': 'No users found'}, 404
 
-        # Return a list of users in JSON format
         return [user.to_dict() for user in users], 200
 
 
@@ -62,7 +60,6 @@ class UserResource(Resource):
         """Update user details by ID"""
         user_data = api.payload
 
-        # Récupérer et mettre à jour les informations de l'utilisateur
         updated_user = facade.update_user(user_id, user_data)
         if not updated_user:
             return {'error': 'User not found'}, 404

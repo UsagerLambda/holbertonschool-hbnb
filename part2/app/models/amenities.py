@@ -5,7 +5,7 @@ class Amenity(BaseModel):
         super().__init__()
         # Vérification que le nom n'est pas vide
         if not name or not name.strip():
-            raise ValueError("Le champ 'name' ne peut pas être vide.")
+            raise ValueError("Field 'name' cannot be empty.")
         valid_name = self.name_length('name', name, 50)
         if isinstance(valid_name, tuple):
             raise ValueError(valid_name[0])
@@ -15,7 +15,7 @@ class Amenity(BaseModel):
         if 'name' in data:
             # Vérification que le nom n'est pas vide
             if not data['name'] or not data['name'].strip():
-                raise ValueError("Le champ 'name' ne peut pas être vide.")
+                raise ValueError("Field 'name' cannot be empty.")
             valid_name = self.name_length('name', data['name'], 50)
             if isinstance(valid_name, tuple):
                 raise ValueError(valid_name[0])

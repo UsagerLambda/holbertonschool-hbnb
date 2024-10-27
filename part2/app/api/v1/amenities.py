@@ -3,7 +3,6 @@ from app.services.facade import HBnBFacade
 
 api = Namespace('amenities', description='Amenity operations')
 
-# Define the amenity model for input validation and documentation
 amenity_model = api.model('Amenity', {
     'name': fields.String(required=True, description='Name of the amenity')
 })
@@ -18,10 +17,11 @@ class AmenityList(Resource):
     def post(self):
         """Register a new amenity"""
         amenity_data = api.payload
-        create_new_amenity = facade.create_amenity(amenity_data)
-        if not create_new_amenity:
-            return {"error": "Invalid input data"}, 400
-        return {"id": create_new_amenity.id, "Amenity successfully created": create_new_amenity.name}, 201
+        try:
+            create_new_amenity = facade.create_amenity(amenity_data)
+            return {"id": create_new_amenity.id, "Amenity successfully created": create_new_amenity.name}, 201
+        except ValueError as e:
+            return {"error": str(e)}, 400
 
     @api.response(200, 'List of amenities retrieved successfully')
     def get(self):

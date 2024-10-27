@@ -3,7 +3,6 @@ from app.services import facade
 
 api = Namespace('places', description='Place operations')
 
-# Define the models for related entities
 amenity_model = api.model('PlaceAmenity', {
     'id': fields.String(description='Amenity ID'),
     'name': fields.String(description='Name of the amenity')
@@ -23,7 +22,6 @@ review_model = api.model('PlaceReview', {
     'user_id': fields.String(description='ID of the user')
 })
 
-# Define the place model for input validation and documentation
 place_model = api.model('Place', {
     'title': fields.String(required=True, description='Title of the place'),
     'description': fields.String(description='Description of the place'),
@@ -57,7 +55,6 @@ class PlaceList(Resource):
         if not places:
             return {'message': 'No places found'}, 404
 
-        # Return a list of users in JSON format
         return [place.to_dict() for place in places], 200
 
 
