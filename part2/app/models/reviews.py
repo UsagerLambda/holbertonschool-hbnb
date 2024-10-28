@@ -15,7 +15,6 @@ class Review(BaseModel):
 
     def to_dict(self):
         return {
-
             "text": self.text,
             "rating": self.rating,
             "place": self.place.to_dict() if self.place else None,  
@@ -23,7 +22,6 @@ class Review(BaseModel):
             "user": self.user.to_dict() if self.user else None,
             "user_id": self.user_id
         }
-
 
     def update(self, data):
         if 'text' in data:

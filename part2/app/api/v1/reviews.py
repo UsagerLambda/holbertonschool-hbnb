@@ -4,7 +4,6 @@ from app.models.reviews import Review
 
 api = Namespace('reviews', description='Review operations')
 
-
 review_model = api.model('Review', {
     'text': fields.String(required=True, description='Text of the review'),
     'rating': fields.Integer(required=True, description='Rating of the place (1-5)'),
@@ -12,21 +11,18 @@ review_model = api.model('Review', {
     'place_id': fields.String(required=True, description='ID of the place')
 })
 
-@api.route('/')
+@api.route('/places/<place_id>/users/<user_id>/reviews')
 class ReviewList(Resource):
     @api.expect(review_model)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
-    def post(self):
+    def post(self, user_id, place_id):
         """Register a new review"""
         review_data = api.payload
 
-        place_id = review_data.pop('place_id')
-        user_id = review_data.pop('user_id')
-
-        place = facade.get_place(place_id)
         user = facade.get_user(user_id)
-
+        place = facade.get_place(place_id)
+        
         review = facade.create_review(user, place, review_data)
         return review.to_dict(), 201
 
@@ -63,7 +59,7 @@ class ReviewResource(Resource):
         review = facade.get_review(review_id)
         if not review:
             return {'error': 'Review not found'}, 404
-        facade.update_review(review_id, review_data)  # Passer les nouvelles données ici
+        facade.update_review(review_id, review_data)  
 
         return {'message': 'Review updated successfully'}, 200
 
