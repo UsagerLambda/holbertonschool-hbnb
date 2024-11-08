@@ -1,6 +1,6 @@
 from app.models.baseModel import BaseModel
 import re
-from flask_bcrypt import bcrypt
+from app import bcrypt
 
 
 class User(BaseModel):
@@ -9,7 +9,7 @@ class User(BaseModel):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
-        self.password = password
+        self.hash_password(password)
         self.is_admin = is_admin
         self.place = []
 

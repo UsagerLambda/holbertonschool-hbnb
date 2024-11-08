@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from flask_bcrypt import bcrypt
 
 api = Namespace('users', description='User operations')
 
@@ -26,7 +27,8 @@ class UserList(Resource):
 
         try:
             new_user = facade.create_user(user_data)
-            return new_user.to_dict(), 201
+            print(new_user.password)
+            return {'id': new_user.id, 'message': 'User successfully created'}, 201
         except Exception as e:
             return {'error': str(e)}, 400
 
