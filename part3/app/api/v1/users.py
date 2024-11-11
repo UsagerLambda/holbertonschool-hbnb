@@ -1,4 +1,5 @@
 from flask_restx import Namespace, Resource, fields
+from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from app.services import facade
 from flask_bcrypt import bcrypt
 
@@ -27,13 +28,14 @@ class UserList(Resource):
 
         try:
             new_user = facade.create_user(user_data)
-            print(new_user.password)
-            return {'id': new_user.id, 'message': 'User successfully created'}, 201
+            access_token = create_access_token(identity={'id': str(new_user.id), 'is_admin': new_user.is_admin}) # Crée un token
+            return {'user_id': new_user.id, 'access_token': access_token}, 201  # affiche user_id & token
         except Exception as e:
             return {'error': str(e)}, 400
 
 
     @api.response(200, 'Users retrieved successfully')
+    @jwt_required()  # need access token
     def get(self):
         """Retrieve a list of all users"""
         users = facade.get_all_users()
@@ -47,6 +49,7 @@ class UserList(Resource):
 class UserResource(Resource):
     @api.response(200, 'User details retrieved successfully')
     @api.response(404, 'User not found')
+    @jwt_required()  # need access token
     def get(self, user_id):
         """Get user details by ID"""
         user = facade.get_user(user_id)
@@ -59,6 +62,7 @@ class UserResource(Resource):
     @api.response(200, 'User successfully updated')
     @api.response(404, 'User not found')
     @api.response(400, 'Invalid input data')
+    @jwt_required()  # need access token
     def put(self, user_id):
         """Update user details by ID"""
         user_data = api.payload
