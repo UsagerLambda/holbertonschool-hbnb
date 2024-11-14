@@ -28,8 +28,7 @@ class UserList(Resource):
 
         try:
             new_user = facade.create_user(user_data)
-            access_token = create_access_token(identity={'id': str(new_user.id), 'is_admin': new_user.is_admin}) # Crée un token
-            return {'user_id': new_user.id, 'access_token': access_token}, 201  # affiche user_id & token
+            return {'user_id': new_user.id}, 201  # affiche user_id
         except Exception as e:
             return {'error': str(e)}, 400
 

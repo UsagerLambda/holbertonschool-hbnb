@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 api = Namespace('places', description='Place operations')
 
@@ -36,14 +37,22 @@ place_model = api.model('Place', {
 
 @api.route('/')
 class PlaceList(Resource):
+    @jwt_required()  # need access token
     @api.expect(place_model)
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
+    @jwt_required()
     def post(self):
         """Register a new place"""
-        user_data = api.payload
+        current_user = get_jwt_identity()
+        place_data = api.payload
+
+        # Vérifier que l'utilisateur authentifié est le propriétaire
+        if place_data['owner_id'] != current_user['id']:
+            return {'error': 'Unauthorized to create a place'}, 403
+
         try:
-            place_data = facade.create_place(user_data)
+            place_data = facade.create_place(place_data)
             return {"message": "Place successfully created", "place": place_data}, 201
         except ValueError as e:
             return {"message": str(e)}, 400
@@ -62,21 +71,31 @@ class PlaceList(Resource):
 class PlaceResource(Resource):
     @api.response(200, 'Place details retrieved successfully')
     @api.response(404, 'Place not found')
+    @jwt_required()
     def get(self, place_id):
         """Get place details by ID"""
+        current_user = get_jwt_identity()
         place = facade.get_place(place_id)
         if not place:
             return {'error': 'User not found'}, 404
 
+        if place.owner_id != current_user['id']:
+            return {'error': 'You are not the place owner'}, 403
+
         return place.to_dict(), 200
 
     @api.expect(place_model)
+    @jwt_required()  # need access token
     @api.response(200, 'Place updated successfully')
     @api.response(404, 'Place not found')
     @api.response(400, 'Invalid input data')
     def put(self, place_id):
         """Update a place's information"""
+        current_user = get_jwt_identity()
         place_data = api.payload
+
+        if place_data['owner_id'] != current_user['id']:
+            return {"message": "Unauthorized to update the place"}, 403
 
         updated_place = facade.update_place(place_id, place_data)
         if not updated_place:
