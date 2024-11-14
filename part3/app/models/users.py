@@ -1,4 +1,4 @@
-from app.models.baseModel import BaseModel
+from .baseModel import BaseModel
 from app import db, bcrypt
 import uuid
 import re
