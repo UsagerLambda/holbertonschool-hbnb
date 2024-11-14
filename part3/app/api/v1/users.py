@@ -28,13 +28,12 @@ class UserList(Resource):
 
         try:
             new_user = facade.create_user(user_data)
-            return {'user_id': new_user.id}, 201  # affiche user_id
+            return {'id': new_user.id, 'first_name': new_user.first_name, 'last_name': new_user.last_name, 'email': new_user.email}, 201  # affiche user_id
         except Exception as e:
             return {'error': str(e)}, 400
 
 
     @api.response(200, 'Users retrieved successfully')
-    @jwt_required()  # need access token
     def get(self):
         """Retrieve a list of all users"""
         users = facade.get_all_users()
@@ -48,7 +47,6 @@ class UserList(Resource):
 class UserResource(Resource):
     @api.response(200, 'User details retrieved successfully')
     @api.response(404, 'User not found')
-    @jwt_required()  # need access token
     def get(self, user_id):
         """Get user details by ID"""
         user = facade.get_user(user_id)
@@ -57,7 +55,7 @@ class UserResource(Resource):
         return user.to_dict(), 200
 
 
-    @api.expect(user_model, validate=True)
+    @api.expect(user_model, validate=False)
     @api.response(200, 'User successfully updated')
     @api.response(404, 'User not found')
     @api.response(400, 'Invalid input data')
@@ -65,6 +63,17 @@ class UserResource(Resource):
     def put(self, user_id):
         """Update user details by ID"""
         user_data = api.payload
+        current_user = get_jwt_identity()
+
+        if user_id != current_user['id']:
+            return {"error": "You are not allowed to update this profile"}
+
+        user = facade.get_user(user_id)
+        if not user:
+            return {'error': 'User not found'}, 404
+
+        if 'email' in user_data or 'password' in user_data:
+            return {"error": "You cannot modify email or password"}, 400
 
         updated_user = facade.update_user(user_id, user_data)
         if not updated_user:

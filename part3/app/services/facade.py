@@ -182,12 +182,12 @@ class HBnBFacade:
             return None
 
         owner_id = place_data.get('owner_id')
-        if owner_id is None:
-            raise ValueError("owner_id is required to update the place")
+        #if owner_id is None:
+            #raise ValueError("owner_id is required to update the place")
 
         owner = self.user_repo.get(owner_id)
-        if not owner:
-            raise ValueError(f"Owner with id {owner_id} does not exist")
+        #if not owner:
+            #raise ValueError(f"Owner with id {owner_id} does not exist")
 
         try:
             self.place_repo.update(place_id, place_data)
