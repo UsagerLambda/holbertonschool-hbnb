@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from app import db
-from app.models import User, Place, Review, Amenity
+from app.models import User, Place, Amenity, Review
 
 class Repository(ABC):
     @abstractmethod
@@ -38,6 +38,10 @@ class SQLAlchemyRepository(Repository):
 
     def get(self, obj_id):
         return self.model.query.get(obj_id)
+    
+    def get_user_model(self):
+        from app.models import User
+        return User
 
     def get_all(self):
         return self.model.query.all()
@@ -57,4 +61,7 @@ class SQLAlchemyRepository(Repository):
 
     def get_by_attribute(self, attr_name, attr_value):
         return self.model.query.filter(getattr(self.model, attr_name) == attr_value).first()
+
+
+
 
