@@ -3,10 +3,12 @@ from app.services.repositories.UserRepository import UserRepository
 from app.services.repositories.PlaceRepository import PlaceRepository
 from app.services.repositories.ReviewRepository import ReviewRepository
 from app.services.repositories.AmenityRepository import AmenityRepository
+from app.services.repositories.PlaceAmenitiesRepository import PlaceAmenities
 from app.models.users import User
 from app.models.places import Place
 from app.models.amenities import Amenity
 from app.models.reviews import Review
+from app.models.PlaceAmenities import PlaceAmenities
 
 
 class HBnBFacade:
@@ -15,6 +17,7 @@ class HBnBFacade:
         self.place_repo = PlaceRepository()
         self.review_repo = ReviewRepository()
         self.amenity_repo = AmenityRepository()
+        self.placeamenities_repo = PlaceAmenitiesRepository()
 
 
 # ######USER##############################################################################################################
@@ -238,3 +241,17 @@ class HBnBFacade:
 
 
 #########################################################################################################################
+
+    def associate_place_to_amenity(self, place_id, amenity_id):
+        """Associate a place and an amenity."""
+        association = PlaceAmenities(place_id=place_id, amenity_id=amenity_id)
+
+        association_list = self.placeamenities_repo.get_all()
+        for tup in association_list:
+            if (
+                association.place_id == tup.place_id
+                and association.amenity_id == tup.amenity_id
+            ):
+                raise Exception("This place already has that amenity.")
+
+        self.placeamenities_repo.add(association)

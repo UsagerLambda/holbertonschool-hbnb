@@ -1,12 +1,15 @@
 from app.models.baseModel import BaseModel
+from sqlalchemy.orm import relationship
 from app import db
 import uuid
 
 class Amenity(BaseModel):
     __tablename__ = 'amenities'
     
-    id = id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     name = db.Column(db.String(50), nullable=False)
+    amenities_place = relationship('places', backref='amenities', lazy=True)
+    place_amenities = relationship('placeamenities', backref='amenities', lazy=True)
 
     def update(self, data):
         if 'name' in data:

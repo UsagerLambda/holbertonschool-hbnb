@@ -1,6 +1,7 @@
 from app.models.baseModel import BaseModel
 from app import db
-from sqlalchemy import CheckConstraint
+from sqlalchemy.orm import relationship
+from sqlalchemy import CheckConstraint, ForeignKey, Column, Integer
 import uuid
 
 class Review(BaseModel):
@@ -10,7 +11,8 @@ class Review(BaseModel):
     text = db.Column(db.String(250), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     owner_id = db.Column(db.Integer(100), nullable=False)
-    self.place_id = place_id
+    review_place = Column(Integer, ForeignKey('places'), nullable=False)
+    review_user = Column(Integer, ForeignKey('users'), nullable=False)
 
     __table_args__ = (
         CheckConstraint('rating >= 1 AND rating <= 5', name='check_rating_range'),

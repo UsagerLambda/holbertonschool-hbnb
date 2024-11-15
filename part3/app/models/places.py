@@ -1,4 +1,6 @@
 from app.models.baseModel import BaseModel
+from sqlalchemy import ForeignKey, Column, Integer
+from sqlalchemy.orm import relationship
 import uuid
 from app import db
 
@@ -12,8 +14,12 @@ class Place(BaseModel):
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
     owner_id = db.Column(db.Integer(100), nullable=False, unique=True)
-    self.reviews = []
-    self.amenities = []
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    place_userID = relationship('users', backref='places', lazy=True)
+    place_review = relationship('reviews', backref='places', lazy=True)
+    place_amenities = relationship('amenities', backref='places', lazy=True)
+    placeamenities = relationship('PlaceAmenities', backref='places', lazy=True)
+
 
     __table_args__ = (
     db.CheckConstraint('-90 <= latitude AND latitude <= 90', name='check_latitude_range'),

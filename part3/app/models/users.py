@@ -1,4 +1,5 @@
 from .baseModel import BaseModel
+from sqlalchemy.orm import relationship
 from app import db, bcrypt
 import uuid
 import re
@@ -13,6 +14,8 @@ class User(BaseModel):
     email = db.Column(db.String(120), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
+    user_place = relationship('places', backref='users', lazy=True)
+    user_review = relationship('reviews', backref='users', lazy=True)
 
     def hash_password(self, password):
         """Hashes the password before storing it."""
