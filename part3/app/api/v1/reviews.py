@@ -72,11 +72,9 @@ class ReviewResource(Resource):
         review_data = api.payload
 
         existing_review = facade.get_review(review_id)
-        # Review existe ?
         if not existing_review:
             return {'error': 'Review not found'}, 404
 
-        # Si la review n'appartient pas à l'utilisateur actuel
         if existing_review.owner_id != current_user['id']:
             return {'error': 'You cant update someone else review'}, 403
 
