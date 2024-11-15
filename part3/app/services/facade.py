@@ -126,19 +126,7 @@ class HBnBFacade:
             raise RuntimeError(f"An error occurred while updating the review: {str(e)}")
 
     def delete_review(self, review_id):
-        review = self.review_repo.get(review_id)
-        if not review:
-            raise ValueError(f"Review with id {review_id} does not exist")
-
-        place = self.place_repo.get(review.place_id)
-        if place:
-            # Retirer la review de la liste des reviews de ce place
-            place.remove_review(review_id)
-            # Mettre à jour le place dans le repository
-            self.place_repo.update(place.id, place.to_dict())
-
-        self.review_repo.delete(review_id)
-        return {"message": "Review deleted successfully"}, 200
+        return self.review_repo.delete(review_id)
 
 
 

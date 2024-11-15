@@ -21,33 +21,41 @@ class ReviewList(Resource):
         """Register a new review"""
         current_user = get_jwt_identity()
         review_data = api.payload
-        print("1: current_user", current_user)
-        print("2: review_data", review_data)
+        print("create review 1: current_user", current_user)
+        print("create review 2: review_data", review_data)
         try:
             place = facade.get_place(review_data['place_id'])
-            print("3: place", place)
+            print("create review 3: place", place)
             # place existe ?
             if not place:
                 return {"error": "Invalid place id"}, 404
-            print("4: place.owner_id", place.owner_id)
+
+            if place.owner_id == review_data['owner_id']:
+                return {"error": "Unauthorized action"}, 403
+
+            print("create review 4: place.owner_id", place.owner_id, "###", "token id: ", current_user['id'])
             # review ça propre place ?
             if place.owner_id == current_user['id']:
                 return {"error": "Unauthorized action"}, 403
 
-            review_data = facade.create_review(review_data)
-            print("5: review_data (updated)", review_data)
-            return {"message": "Review successfully created", "review": review_data}, 201
+            review = facade.create_review(review_data)
+            print("create review 5: review_data (updated):", review)
+            return {
+                "id": review['id'],
+                "text": review['text'],
+                "rating": review['rating']
+            }, 201
         except Exception as e:
-            return {"error": "Invalid input data"}, 400
+            return {"error": "Invalid input data: {e}"}, 400
 
     @api.response(200, 'List of reviews retrieved successfully')
     def get(self):
         """Retrieve a list of all reviews"""
-        print("BBBB")
+        print("################################################################################")
         reviews = facade.get_all_reviews()
+        print("REVIEWS ALL", reviews)
         if not reviews:
             return {'message': 'No reviews found'}, 404
-        print("AAAAA", reviews)
         return [{"id": review.id, "text": review.text, "rating": review.rating } for review in reviews], 200
 
 @api.route('/<review_id>')
@@ -99,11 +107,9 @@ class ReviewResource(Resource):
             return {'error': 'Review not found'}, 404
 
         if existing_review.owner_id != current_user['id']:
-            return {'error': 'You cant delete someone else review'}, 403
+            return {"error": "Unauthorized action"}, 403
 
-        review = facade.delete_review(review_id)
-        if not review:
-            return {'error': 'Review not found'}, 404
+        facade.delete_review(review_id)
 
         return {"message": "Review deleted successfully"}, 200
 
