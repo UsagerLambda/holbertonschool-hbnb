@@ -1,16 +1,24 @@
 from app.models.baseModel import BaseModel
+import uuid
+from app import db
 
 class Place(BaseModel):
-    def __init__(self, title, description, price, latitude, longitude, owner_id):
-        super().__init__()
-        self.title = title
-        self.description = description
-        self.price = price
-        self.latitude = latitude
-        self.longitude = longitude
-        self.owner_id = owner_id
-        self.reviews = []
-        self.amenities = []
+    __tablename__ = 'places'
+
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    title = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.String(500), nullable=False)
+    price = db.Column(db.Numeric(10,2), nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
+    owner_id = db.Column(db.Integer(100), nullable=False, unique=True)
+    self.reviews = []
+    self.amenities = []
+
+    __table_args__ = (
+    db.CheckConstraint('-90 <= latitude AND latitude <= 90', name='check_latitude_range'),
+    db.CheckConstraint('-180 <= longitude AND longitude <= 180', name='check_longitude_range'),
+)
 
     def to_dict(self):
         return {
