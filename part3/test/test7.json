@@ -1,0 +1,586 @@
+{
+    "info": {
+        "_postman_id": "1234-5678-abcd-efgh",
+        "name": "HBnB API Tests v7",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": "Tests complets pour l'API HBnB v7"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://127.0.0.1:5000/api/v1",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Create User 1",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has required fields\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('user_id');",
+                                    "    pm.expect(jsonData).to.have.property('access_token');",
+                                    "});",
+                                    "",
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData) {",
+                                    "    pm.environment.set(\"userId1\", jsonData.user_id);",
+                                    "    pm.environment.set(\"authToken1\", jsonData.access_token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"first_name\": \"User1\",\n    \"last_name\": \"Test\",\n    \"email\": \"user1@example.com\",\n    \"password\": \"testpassword123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/users",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["users"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create User 2",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has required fields\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('user_id');",
+                                    "    pm.expect(jsonData).to.have.property('access_token');",
+                                    "});",
+                                    "",
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData) {",
+                                    "    pm.environment.set(\"userId2\", jsonData.user_id);",
+                                    "    pm.environment.set(\"authToken2\", jsonData.access_token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"first_name\": \"User2\",\n    \"last_name\": \"Test\",\n    \"email\": \"user2@example.com\",\n    \"password\": \"testpassword123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/users",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["users"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create User - Invalid Email",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 400\", function () {",
+                                    "    pm.response.to.have.status(400);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Error message is correct\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.error).to.include('Invalid email format');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"first_name\": \"Invalid\",\n    \"last_name\": \"User\",\n    \"email\": \"invalid-email\",\n    \"password\": \"testpassword123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/users",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["users"]
+                        }
+                    }
+                },
+                {
+                    "name": "Login User 1",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has access token\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('access_token');",
+                                    "});",
+                                    "",
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData && jsonData.access_token) {",
+                                    "    pm.environment.set(\"authToken1\", jsonData.access_token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"user1@example.com\",\n    \"password\": \"testpassword123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/login",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["auth", "login"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Places",
+            "item": [
+                {
+                    "name": "Create Place",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has required place fields\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('title');",
+                                    "    pm.expect(jsonData).to.have.property('description');",
+                                    "    pm.expect(jsonData).to.have.property('price');",
+                                    "    pm.expect(jsonData).to.have.property('id');",
+                                    "});",
+                                    "",
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData && jsonData.id) {",
+                                    "    pm.environment.set(\"placeId\", jsonData.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{authToken1}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Beautiful Apartment\",\n    \"description\": \"A lovely apartment in the heart of the city\",\n    \"price\": 150.00,\n    \"latitude\": 48.8566,\n    \"longitude\": 2.3522,\n    \"owner_id\": \"{{userId1}}\",\n    \"amenities\": []\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/places",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["places"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Place Details",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Place has complete details\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('title');",
+                                    "    pm.expect(jsonData).to.have.property('description');",
+                                    "    pm.expect(jsonData).to.have.property('price');",
+                                    "    pm.expect(jsonData).to.have.property('owner');",
+                                    "    pm.expect(jsonData.owner).to.have.property('id');",
+                                    "    pm.expect(jsonData.owner).to.have.property('email');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{authToken1}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/places/{{placeId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["places", "{{placeId}}"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Reviews",
+            "item": [
+                {
+                    "name": "Create Review",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 201\", function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Review has required fields\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('id');",
+                                    "    pm.expect(jsonData).to.have.property('text');",
+                                    "    pm.expect(jsonData).to.have.property('rating');",
+                                    "});",
+                                    "",
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData && jsonData.id) {",
+                                    "    pm.environment.set(\"reviewId\", jsonData.id);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{authToken2}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"text\": \"Amazing place!\",\n    \"rating\": 5,\n    \"place_id\": \"{{placeId}}\",\n    \"owner_id\": \"{{userId2}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/reviews",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["reviews"]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Invalid Review (Owner Review)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 403\", function () {",
+                                    "    pm.response.to.have.status(403);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Error message is correct\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.error).to.equal('Unauthorized action');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{authToken1}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw" : "{\n    \"text\": \"Self review\",\n    \"rating\": 5,\n    \"place_id\": \"{{placeId}}\",\n    \"owner_id\": \"{{userId1}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/reviews",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["reviews"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Review Details",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Review details are complete\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('id');",
+                                    "    pm.expect(jsonData).to.have.property('text');",
+                                    "    pm.expect(jsonData).to.have.property('rating');",
+                                    "    pm.expect(jsonData).to.have.property('owner_id');",
+                                    "    pm.expect(jsonData).to.have.property('place_id');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{authToken2}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/reviews/{{reviewId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["reviews", "{{reviewId}}"]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Review",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Review updated successfully\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.text).to.equal('Updated review text');",
+                                    "    pm.expect(jsonData.rating).to.equal(4);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{authToken2}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"text\": \"Updated review text\",\n    \"rating\": 4,\n    \"place_id\": \"{{placeId}}\",\n    \"owner_id\": \"{{userId2}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/reviews/{{reviewId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["reviews", "{{reviewId}}"]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Reviews by Place",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Reviews list is not empty\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.be.an('array').that.is.not.empty;",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Reviews have required fields\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData[0]).to.have.property('id');",
+                                    "    pm.expect(jsonData[0]).to.have.property('text');",
+                                    "    pm.expect(jsonData[0]).to.have.property('rating');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{authToken2}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/places/{{placeId}}/reviews",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["places", "{{placeId}}", "reviews"]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Review",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Deletion message is correct\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.message).to.equal('Review deleted successfully');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{authToken2}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/reviews/{{reviewId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["reviews", "{{reviewId}}"]
+                        }
+                    }
+                },
+                {
+                    "name": "Verify Review Deletion",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 404\", function () {",
+                                    "    pm.response.to.have.status(404);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Error message is correct\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.error).to.equal('Review not found');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{authToken2}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/reviews/{{reviewId}}",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["reviews", "{{reviewId}}"]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

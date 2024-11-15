@@ -21,42 +21,39 @@ class ReviewList(Resource):
         """Register a new review"""
         current_user = get_jwt_identity()
         review_data = api.payload
-        print("create review 1: current_user", current_user)
-        print("create review 2: review_data", review_data)
+        #print("create review 1: current_user", current_user)
+        #print("create review 2: review_data", review_data)
         try:
             place = facade.get_place(review_data['place_id'])
-            print("create review 3: place", place)
+            #print("create review 3: place", place)
             # place existe ?
+            print(review_data)
             if not place:
                 return {"error": "Invalid place id"}, 404
 
-            if place.owner_id == review_data['owner_id']:
-                return {"error": "Unauthorized action"}, 403
-
-            print("create review 4: place.owner_id", place.owner_id, "###", "token id: ", current_user['id'])
-            # review ça propre place ?
-            if place.owner_id == current_user['id']:
+            if review_data['owner_id'] != current_user['id']:
                 return {"error": "Unauthorized action"}, 403
 
             review = facade.create_review(review_data)
-            print("create review 5: review_data (updated):", review)
+            #print("create review 5: review_data (updated):", review)
             return {
                 "id": review['id'],
                 "text": review['text'],
-                "rating": review['rating']
+                "rating": review['rating'],
+                "owner_id": review['owner_id'],
+                "place_id": review['place_id']
             }, 201
         except Exception as e:
-            return {"error": "Invalid input data: {e}"}, 400
+            print(e)
+            return {"error": "Invalid input data"}, 400
 
     @api.response(200, 'List of reviews retrieved successfully')
     def get(self):
         """Retrieve a list of all reviews"""
-        print("################################################################################")
         reviews = facade.get_all_reviews()
-        print("REVIEWS ALL", reviews)
         if not reviews:
             return {'message': 'No reviews found'}, 404
-        return [{"id": review.id, "text": review.text, "rating": review.rating } for review in reviews], 200
+        return [{"id": review.id, "text": review.text, "rating": review.rating, "owner_id": review.owner_id } for review in reviews], 200
 
 @api.route('/<review_id>')
 class ReviewResource(Resource):
@@ -89,11 +86,12 @@ class ReviewResource(Resource):
         if existing_review.owner_id != current_user['id']:
             return {'error': 'You cant update someone else review'}, 403
 
-        updated_review = facade.update_review(review_id, review_data)
-        if not updated_review:
-            return {'error': 'Place not found'}, 404
+        try:
+            facade.update_review(review_id, api.payload)
+        except Exception as e:
+            return {"error": "Invalid input data"}, 400
 
-        return updated_review.to_dict(), 200
+        return {"message": "Review updated successfully"}, 200
 
     @jwt_required()
     @api.response(200, 'Review deleted successfully')
@@ -114,7 +112,7 @@ class ReviewResource(Resource):
         return {"message": "Review deleted successfully"}, 200
 
 
-@api.route('/places/<place_id>/reviews')
+@api.route('/places/<place_id>')
 class PlaceReviewList(Resource):
     @api.response(200, 'List of reviews for the place retrieved successfully')
     @api.response(404, 'Place not found')
@@ -125,4 +123,4 @@ class PlaceReviewList(Resource):
         if not reviews:
             return {'message': 'No reviews found for this place'}, 404
 
-        return [review.to_dict() for review in reviews], 200
+        return [{"id": review.id, "text": review.text, "rating": review.rating, "owner_id": review.owner_id } for review in reviews], 200

@@ -7,12 +7,12 @@ class TestReviews:
     def test_create_reviews(self, auth_client: AuthenticatedClient, shared_data: SharedData):
         assert shared_data.place_id != None
         shared_data.review_payload["place_id"] = shared_data.place_id
-        shared_data.review_payload["user_id"] = shared_data.user_id
+        shared_data.review_payload["owner_id"] = shared_data.user_id
 
         check_multiple_action([
             { "place_id": None, "status": 404, "excepted_payload": { "error": "Invalid place id" } },
-            { "user_id": None, "status": 403, "excepted_payload": { "error": "Unauthorized action" } },
-            { "user_id": shared_data.users[0]["id"], "status": 403, "excepted_payload": { "error": "Unauthorized action" } },
+            { "owner_id": None, "status": 403, "excepted_payload": { "error": "Unauthorized action" } },
+            { "owner_id": shared_data.users[0]["id"], "status": 403, "excepted_payload": { "error": "Unauthorized action" } },
             { "rating": -1 }
         ], auth_client.post, shared_data.review_payload, "/api/v1/reviews/", 400, { "error": "Invalid input data" })
 

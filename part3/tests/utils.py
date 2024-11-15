@@ -62,7 +62,7 @@ class SharedData:
         self.review_payload = {
             'text': "This is my review",
             'rating': 5,
-            'user_id': None,
+            'owner_id': None,
             'place_id': None
         }
 
@@ -95,7 +95,7 @@ class SharedData:
         return ["title", "description", "price", "latitude", "longitude", "owner_id"]
 
     def reviews_template(self):
-        return ["text", "rating", "user_id", "place_id"]
+        return ["text", "rating", "owner_id", "place_id"]
 
     def amenities_template(self):
         return ["name"]
