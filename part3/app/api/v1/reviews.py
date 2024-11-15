@@ -21,13 +21,8 @@ class ReviewList(Resource):
         """Register a new review"""
         current_user = get_jwt_identity()
         review_data = api.payload
-        #print("create review 1: current_user", current_user)
-        #print("create review 2: review_data", review_data)
         try:
             place = facade.get_place(review_data['place_id'])
-            #print("create review 3: place", place)
-            # place existe ?
-            print(review_data)
             if not place:
                 return {"error": "Invalid place id"}, 404
 
@@ -35,7 +30,6 @@ class ReviewList(Resource):
                 return {"error": "Unauthorized action"}, 403
 
             review = facade.create_review(review_data)
-            #print("create review 5: review_data (updated):", review)
             return {
                 "id": review['id'],
                 "text": review['text'],
