@@ -38,7 +38,6 @@ class ReviewList(Resource):
                 "place_id": review['place_id']
             }, 201
         except Exception as e:
-            print(e)
             return {"error": "Invalid input data"}, 400
 
     @api.response(200, 'List of reviews retrieved successfully')
@@ -75,8 +74,9 @@ class ReviewResource(Resource):
         if not existing_review:
             return {'error': 'Review not found'}, 404
 
-        if existing_review.owner_id != current_user['id']:
-            return {'error': 'You cant update someone else review'}, 403
+        if not current_user['is_admin']:
+            if existing_review.owner_id != current_user['id']:
+                return {'error': 'You cant update someone else review'}, 403
 
         try:
             facade.update_review(review_id, api.payload)
@@ -96,11 +96,11 @@ class ReviewResource(Resource):
         if not existing_review:
             return {'error': 'Review not found'}, 404
 
-        if existing_review.owner_id != current_user['id']:
-            return {"error": "Unauthorized action"}, 403
+        if not current_user["is_admin"]:
+            if existing_review.owner_id != current_user['id']:
+                return {"error": "Unauthorized action"}, 403
 
         facade.delete_review(review_id)
-
         return {"message": "Review deleted successfully"}, 200
 
 

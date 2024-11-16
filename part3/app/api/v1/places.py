@@ -60,7 +60,7 @@ class PlaceResource(Resource):
         current_user = get_jwt_identity()
         place = facade.get_place(place_id)
         if not place:
-            return {'error': 'User not found'}, 404
+            return {'error': 'Place not found'}, 404
 
         if place.owner_id != current_user['id']:
             return {'error': 'You are not the place owner'}, 403
@@ -101,14 +101,39 @@ class PlaceResource(Resource):
         if not place:
             return {"error": "Place not found"}, 404
 
-        if place.owner_id != current_user['id']:
-            return {"message": "Unauthorized to update the place"}, 403
+        if not current_user['is_admin']:
+            if place.owner_id != current_user['id']:
+                return {"message": "Unauthorized to update the place"}, 403
 
         updated_place = facade.update_place(place_id, place_data)
         if not updated_place:
             return {'error': 'Place not found'}, 404
 
         return {"message": "Place updated successfully"}, 200
+
+    @jwt_required()  # need access token
+    @api.response(200, 'Place delete successfully')
+    @api.response(404, 'Place not found')
+    def delete(self, place_id):
+        """Delete a place"""
+        current_user = get_jwt_identity()
+
+        place = facade.get_place(place_id)
+        if not place:
+            return {"error": "Place not found"}, 404
+
+        if not current_user["is_admin"]:
+            if current_user["id"] != place.owner_id:
+                return {"error": "Unauthorized action"}, 403
+
+        for review in place.reviews:
+            facade.delete_review(review['id'])
+
+        for amenity in place.amenities:
+            facade.delete_amenity(amenity.id)
+
+        facade.delete_place(place_id)
+        return {"message": "Place deleted successfully"}, 200
 
 @api.route("/<place_id>/add_amenity/<amenity_id>")
 class PlaceAmenity(Resource):
@@ -133,3 +158,4 @@ class PlaceAmenity(Resource):
 
         place.amenities.append(amenity)
         return {"message": "Add amenity to place"}, 200
+

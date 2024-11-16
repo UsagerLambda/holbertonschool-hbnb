@@ -19,7 +19,7 @@ admin_user_payload = {
 Peut-on récupérer les infos des admins dans le GET de user ?
 """
 
-@pytest.mark.skip()
+
 class TestAdmin:
     def test_create_admin_user(self, client: FlaskClient, auth_client: AuthenticatedClient, shared_data: SharedData, application):
         assert shared_data.token != None
@@ -127,7 +127,7 @@ class TestAdmin:
 
         new_reviews = shared_data.review_payload.copy()
         new_reviews["text"] = "Je sais pas"
-        new_reviews["user_id"] = shared_data.user_id
+        new_reviews["owner_id"] = shared_data.user_id
 
         result = auth_client.post(f"/api/v1/reviews/", json=new_reviews).get_json()
         check_response(
@@ -141,7 +141,7 @@ class TestAdmin:
 
         new_place = shared_data.place_payload.copy()
         new_place["title"] = "????????????"
-        new_place["owner"] = shared_data.user_id
+        new_place["owner_id"] = shared_data.user_id
 
         place_result = auth_client.post("/api/v1/places/", json=new_place).get_json()
 

@@ -128,8 +128,6 @@ class HBnBFacade:
     def delete_review(self, review_id):
         return self.review_repo.delete(review_id)
 
-
-
     ###########################################################################################################
 # ####PLACES##############################################################################################################
 
@@ -185,6 +183,8 @@ class HBnBFacade:
         except Exception as e:
             raise RuntimeError(f"An error occurred while updating the place: {str(e)}")
 
+    def delete_place(self, place_id):
+        return self.place_repo.delete(place_id)
 
 # ########################################################################################################################
 #AMENITIES BLOCK##########################################################################################################
@@ -220,5 +220,7 @@ class HBnBFacade:
         self.amenity_repo.update(amenity_id, amenity.to_dict())
         return amenity
 
+    def delete_amenity(self, amenity_id):
+        return self.amenity_repo.delete(amenity_id)
 
 #########################################################################################################################
