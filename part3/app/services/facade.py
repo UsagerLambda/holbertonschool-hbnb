@@ -3,7 +3,7 @@ from app.services.repositories.UserRepository import UserRepository
 from app.services.repositories.PlaceRepository import PlaceRepository
 from app.services.repositories.ReviewRepository import ReviewRepository
 from app.services.repositories.AmenityRepository import AmenityRepository
-from app.services.repositories.PlaceAmenitiesRepository import PlaceAmenities
+from app.services.repositories.PlaceAmenitiesRepository import PlaceAmenityRepository
 from app.models.users import User
 from app.models.places import Place
 from app.models.amenities import Amenity
@@ -17,7 +17,7 @@ class HBnBFacade:
         self.place_repo = PlaceRepository()
         self.review_repo = ReviewRepository()
         self.amenity_repo = AmenityRepository()
-        self.placeamenities_repo = PlaceAmenitiesRepository()
+        self.placeamenities_repo =  PlaceAmenityRepository()
 
 
 # ######USER##############################################################################################################
