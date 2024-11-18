@@ -1,4 +1,5 @@
 from app.models.PlaceAmenities import PlaceAmenities
+from app import db
 from app.persistence.repository import SQLAlchemyRepository
 
 

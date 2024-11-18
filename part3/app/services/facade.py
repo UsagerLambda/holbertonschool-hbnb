@@ -1,3 +1,4 @@
+from app import db
 from app.persistence.repository import SQLAlchemyRepository
 from app.services.repositories.UserRepository import UserRepository
 from app.services.repositories.PlaceRepository import PlaceRepository

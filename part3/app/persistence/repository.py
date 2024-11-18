@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from app import db
-from app.models import users, places, amenities, reviews
+from app.models import users, places, amenities, reviews, PlaceAmenities
 
 class Repository(ABC):
     @abstractmethod
