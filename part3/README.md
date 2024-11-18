@@ -57,3 +57,8 @@ python3 run.py
 ```
 
 L'application sera accessible à l'adresse http://127.0.0.1:5000.
+
+## Diagrammes
+
+![Diagramme1(https://www.pixenli.com/image/QUlC86V6)]
+![Diagramme2(https://www.pixenli.com/image/WJ2FbiFz)]
