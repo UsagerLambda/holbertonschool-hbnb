@@ -51,9 +51,9 @@ pip install -r requirements.txt
 ```
 
 ## Utilisation
-### Pour démarrer l'application, exécute le fichier **run.py**
+### Pour démarrer l'application, exécute le fichier **create_db.sh**
 ```bash
-python3 run.py
+./create_db.sh
 ```
 
 L'application sera accessible à l'adresse http://127.0.0.1:5000.
