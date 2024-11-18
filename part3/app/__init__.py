@@ -3,9 +3,11 @@ from flask_restx import Api
 from werkzeug.exceptions import BadRequest
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
+from flask_sqlalchemy import SQLAlchemy
 
 bcrypt = Bcrypt()
 jwt = JWTManager()
+db = SQLAlchemy()
 
 from app.api.v1.users import api as users_ns
 from app.api.v1.reviews import api as reviews_ns
@@ -19,6 +21,8 @@ def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
     app.config.from_object(config_class)
     api = Api(app, version='1.0', title='HBnB API', description='HBnB Application API')
+    db.init_app(app)
+    return app
 
     @app.errorhandler(ValueError)
     def handle_value_error(error):

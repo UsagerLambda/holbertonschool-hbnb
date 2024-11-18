@@ -1,17 +1,23 @@
-from app.persistence.repository import InMemoryRepository
+from app.persistence.repository import SQLAlchemyRepository
+from app.services.repositories.UserRepository import UserRepository
+from app.services.repositories.PlaceRepository import PlaceRepository
+from app.services.repositories.ReviewRepository import ReviewRepository
+from app.services.repositories.AmenityRepository import AmenityRepository
+from app.services.repositories.PlaceAmenitiesRepository import PlaceAmenityRepository
 from app.models.users import User
 from app.models.places import Place
 from app.models.amenities import Amenity
 from app.models.reviews import Review
+from app.models.PlaceAmenities import PlaceAmenities
 
 
 class HBnBFacade:
     def __init__(self):
-        if not hasattr(self, "user_repo"):
-            self.user_repo = InMemoryRepository()
-            self.place_repo = InMemoryRepository()
-            self.review_repo = InMemoryRepository()
-            self.amenity_repo = InMemoryRepository()
+        self.user_repo = UserRepository()
+        self.place_repo = PlaceRepository()
+        self.review_repo = ReviewRepository()
+        self.amenity_repo = AmenityRepository()
+        self.placeamenities_repo =  PlaceAmenityRepository()
 
 
 # ######USER##############################################################################################################
@@ -20,6 +26,7 @@ class HBnBFacade:
     def create_user(self, user_data):
         """Create an user."""
         user = User(**user_data)
+        user.hash_password(user_data['password'])
         self.user_repo.add(user)
         return user
 
@@ -224,3 +231,17 @@ class HBnBFacade:
         return self.amenity_repo.delete(amenity_id)
 
 #########################################################################################################################
+
+    def associate_place_to_amenity(self, place_id, amenity_id):
+        """Associate a place and an amenity."""
+        association = PlaceAmenities(place_id=place_id, amenity_id=amenity_id)
+
+        association_list = self.placeamenities_repo.get_all()
+        for tup in association_list:
+            if (
+                association.place_id == tup.place_id
+                and association.amenity_id == tup.amenity_id
+            ):
+                raise Exception("This place already has that amenity.")
+
+        self.placeamenities_repo.add(association)

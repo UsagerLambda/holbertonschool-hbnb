@@ -46,31 +46,18 @@ class HBnBFacade:
 
     #############################################################################################################
 #REVIEW BLOCK####################################################################################################
-
-
-    def create_review(self, review_data):
+    def create_review(self, user, place, review_data):
+        """Create a review"""
         try:
-            place_id = review_data.get('place_id')
-            owner_id = review_data.get('owner_id')
-
-            if not place_id:
-                raise ValueError("place_id is required")
-            if not owner_id:
-                raise ValueError("owner_id is required")
-
-            place = self.place_repo.get(place_id)
-            if not place:
-                raise ValueError(f"Place with id {place_id} does not exist")
-
-            user = self.user_repo.get(owner_id)
-            if not user:
-                raise ValueError(f"User with id {owner_id} does not exist")
-
-            review = Review(**review_data)
+            review_data = {k: v for k, v in review_data.items() if k not in ['user_id', 'place_id']}
+        
+        
+            review = Review(user=user, place=place,**review_data)
+        
             self.review_repo.add(review)
-
-            place.add_review(review)
-            self.place_repo.update(place.id, place.to_dict())
+            return review
+        except ValueError as e:
+            raise ValueError(f"Failed to create review: {str(e)}")
 
             return review.to_dict()
         except (ValueError, TypeError) as e:
@@ -222,15 +209,10 @@ class HBnBFacade:
 
 
     def update_amenity(self, amenity_id, amenity_data):
-        """Met à jour un amenity existant."""
-        amenity = self.amenity_repo.get(amenity_id)
+        amenity = self.amenity_repo.get(amenity_id)  # Vérifiez que l'amenity est trouvé ici
         if not amenity:
-            raise ValueError(f"Amenity with id {amenity_id} not found.")
+            return None
 
-        amenity.update(amenity_data)
-
-        self.amenity_repo.update(amenity_id, amenity.to_dict())
+        amenity.update(amenity_data)  # Mettez à jour les données
         return amenity
-
-
 #########################################################################################################################

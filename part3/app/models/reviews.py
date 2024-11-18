@@ -1,15 +1,22 @@
 from app.models.baseModel import BaseModel
+from app import db
+from sqlalchemy.orm import relationship
+from sqlalchemy import CheckConstraint, ForeignKey, Column, Integer
+import uuid
 
 class Review(BaseModel):
-    def __init__(self, text, rating, owner_id, place_id):
-        super().__init__()
-        if not (1 <= rating <= 5):
-            raise ValueError("Rating must be between 1 and 5")
+    __tablename__ = 'reviews'
 
-        self.text = text
-        self.rating = rating
-        self.owner_id = owner_id
-        self.place_id = place_id
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    text = db.Column(db.String(250), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    owner_id = db.Column(db.Integer(100), nullable=False)
+    review_place = Column(Integer, ForeignKey('places'), nullable=False)
+    review_user = Column(Integer, ForeignKey('users'), nullable=False)
+
+    __table_args__ = (
+        CheckConstraint('rating >= 1 AND rating <= 5', name='check_rating_range'),
+    )
 
     def to_dict(self):
         return {
@@ -19,3 +26,7 @@ class Review(BaseModel):
             'owner_id': self.owner_id,
             'place_id': self.place_id
         }
+    
+    def set_rating(self, value):
+        if not (1 <= value <= 5):
+            raise ValueError("Rating must be between 1 and 5")
