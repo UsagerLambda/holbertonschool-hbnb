@@ -105,5 +105,58 @@ erDiagram
        int amenity_id
    }
 ```
-![Diagramme1](https://www.pixenli.com/image/QUlC86V6)
-![Diagramme2](https://www.pixenli.com/image/WJ2FbiFz)
+```mermaid
+erDiagram
+    USER ||--o{ PLACE : owns
+    USER ||--o{ REVIEW : writes
+    PLACE ||--o{ REVIEW : receives
+    PLACE ||--o{ PLACE_AMENITY : contains
+    AMENITY ||--o{ PLACE_AMENITY : associated_with
+    USER ||--o{ RESERVATION : makes
+    PLACE ||--o{ RESERVATION : booked_for
+
+    USER {
+        int id
+        string first_name
+        string last_name 
+        string email
+        string password
+        bool is_admin
+    }
+
+    PLACE {
+        int id
+        string title
+        string description
+        float price
+        float latitude
+        float longitude
+        int owner_id 
+    }
+
+    REVIEW {
+        int id
+        string text
+        int rating
+        int user_id
+        int place_id
+    }
+
+    AMENITY {
+        int id
+        string name
+    }
+
+    PLACE_AMENITY {
+        int place_id
+        int amenity_id
+    }
+
+    RESERVATION {
+        int id
+        date start_date
+        date end_date
+        int user_id
+        int place_id
+    }
+```
