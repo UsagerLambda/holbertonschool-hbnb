@@ -51,9 +51,13 @@ pip install -r requirements.txt
 ```
 
 ## Utilisation
-### Pour démarrer l'application, exécute le fichier **create_db.sh**
+### Pour démarrer l'application la première fois, exécute le fichier **create_db.sh**
 ```bash
 ./create_db.sh
+```
+### Puis pour relancer le serveur sans perdre les données déja enregistrées , exécute le fichier **run_app.sh**
+```bash
+./run_app.sh
 ```
 
 L'application sera accessible à l'adresse http://127.0.0.1:5000.
