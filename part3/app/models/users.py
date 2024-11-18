@@ -1,5 +1,6 @@
 from .baseModel import BaseModel
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.hybrid import hybrid_property
 from app import db, bcrypt
 import uuid
 import re
@@ -9,13 +10,13 @@ class User(BaseModel):
     __tablename__ = 'users'
 
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
-    email = db.Column(db.String(120), nullable=False, unique=True)
+    _first_name = db.Column(db.String(50), nullable=False)
+    _last_name = db.Column(db.String(50), nullable=False)
+    _email = db.Column(db.String(120), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
-    user_place = relationship('places', backref='users', lazy=True)
-    user_review = relationship('reviews', backref='users', lazy=True)
+    user_place = relationship('Place', backref='owner', lazy=True, cascade="all, delete-orphan")
+    user_review = relationship('Review', backref='user', lazy=True, cascade="all, delete-orphan")
 
     def hash_password(self, password):
         """Hashes the password before storing it."""
@@ -33,7 +34,7 @@ class User(BaseModel):
 
 
     def add_place(self, place):
-        self.place.append(place)
+        self.user_place.append(place)
 
 
     def update(self, data):

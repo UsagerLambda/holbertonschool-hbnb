@@ -1,6 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import create_access_token
 from app.services import facade
+from app import bcrypt
 
 api = Namespace('auth', description='Authentication operations')
 
@@ -18,7 +19,7 @@ class Login(Resource):
         credentials = api.payload  # Get the email and password from the request payload
 
         # Step 1: Retrieve the user based on the provided email
-        user = facade.get_user_by_email(credentials['email'])
+        user = facade.get_user_email(credentials['email'])
 
         # Step 2: Check if the user exists and the password is correct
         if not user or not user.verify_password(credentials['password']):

@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from app import db
-from app.models import users, places, amenities, reviews
 
 class Repository(ABC):
     @abstractmethod
@@ -38,7 +37,7 @@ class SQLAlchemyRepository(Repository):
 
     def get(self, obj_id):
         return self.model.query.get(obj_id)
-    
+
     def get_user_model(self):
         from app.models import User
         return User

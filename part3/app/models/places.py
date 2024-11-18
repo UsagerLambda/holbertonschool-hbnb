@@ -8,30 +8,23 @@ class Place(BaseModel):
     __tablename__ = 'places'
 
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    title = db.Column(db.String(120), nullable=False)
-    description = db.Column(db.String(500), nullable=False)
-    price = db.Column(db.Numeric(10,2), nullable=False)
-    latitude = db.Column(db.Float, nullable=False)
-    longitude = db.Column(db.Float, nullable=False)
-    owner_id = db.Column(db.Integer(100), nullable=False, unique=True)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    place_userID = relationship('users', backref='places', lazy=True)
-    place_review = relationship('reviews', backref='places', lazy=True)
-    place_amenities = relationship('amenities', backref='places', lazy=True)
-    placeamenities = relationship('PlaceAmenities', backref='places', lazy=True)
+    _title = db.Column(db.String(120), nullable=False)
+    _description = db.Column(db.String(500), nullable=False)
+    _price = db.Column(db.Numeric(10,2), nullable=False)
+    _latitude = db.Column(db.Float, nullable=False)
+    _longitude = db.Column(db.Float, nullable=False)
+    owner_id = db.Column(db.String(36), db.ForeignKey("users.id"), nullable=False, unique=True)
+    reviews = relationship('Review', backref='place', lazy=True, cascade="all, delete-orphan")
+    amenities = relationship("Amenity", secondary="place_amenities", back_populates="places", cascade="all, delete", viewonly=True)
+    place_amenities = relationship("PlaceAmenities", back_populates="place", cascade="all, delete-orphan")
 
-
-    __table_args__ = (
-    db.CheckConstraint('-90 <= latitude AND latitude <= 90', name='check_latitude_range'),
-    db.CheckConstraint('-180 <= longitude AND longitude <= 180', name='check_longitude_range'),
-)
 
     def to_dict(self):
         return {
             'id': self.id,
             'title': self.title,
             'description': self.description,
-            'price': self.price,
+            'price': float(self.price),
             'latitude': self.latitude,
             'longitude': self.longitude,
             'owner_id': self.owner_id,

@@ -20,14 +20,17 @@ from app.api.v1.admin import api as admin_ns
 def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
     app.config.from_object(config_class)
+
     api = Api(app, version='1.0', title='HBnB API', description='HBnB Application API')
+
+    bcrypt.init_app(app)
+    jwt.init_app(app)
     db.init_app(app)
-    return app
 
     @app.errorhandler(ValueError)
     def handle_value_error(error):
         response = jsonify({
-            "error": str(error)
+            "error ": str(error)
         })
         response.status_code = 400
         return response
@@ -39,6 +42,4 @@ def create_app(config_class="config.DevelopmentConfig"):
     api.add_namespace(places_ns, path='/api/v1/places')
     api.add_namespace(auth_ns, path='/api/v1/auth') ###
     api.add_namespace(admin_ns, path="/api/v1/admin")
-    bcrypt.init_app(app)
-    jwt.init_app(app)
     return app

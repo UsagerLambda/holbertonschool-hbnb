@@ -2,6 +2,7 @@ from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from app.services import facade
 from flask_bcrypt import bcrypt
+from sqlalchemy.exc import IntegrityError
 
 api = Namespace('users', description='User operations')
 
@@ -22,13 +23,16 @@ class UserList(Resource):
         """Register a new user"""
         user_data = api.payload
 
-        existing_user = facade.get_user_by_email(user_data['email'])
-        if existing_user:
-            return {'error': 'Email already registered'}, 400
-
         try:
             new_user = facade.create_user(user_data)
-            return {'id': new_user.id, 'first_name': new_user.first_name, 'last_name': new_user.last_name, 'email': new_user.email}, 201  # affiche user_id
+            return {
+                'id': new_user.id,
+                'first_name': new_user.first_name,
+                'last_name': new_user.last_name,
+                'email': new_user.email,
+            }, 201
+        except IntegrityError:
+            return {'error': 'Email already registered'}, 400
         except Exception as e:
             return {'error': str(e)}, 400
 
@@ -37,6 +41,7 @@ class UserList(Resource):
     def get(self):
         """Retrieve a list of all users"""
         users = facade.get_all_users()
+
         if not users:
             return {'message': 'No users found'}, 404
 
@@ -52,7 +57,7 @@ class UserResource(Resource):
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
-        return user.to_dict(), 200
+        return {'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}, 201
 
 
     @api.expect(user_model, validate=False)
