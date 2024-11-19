@@ -65,6 +65,10 @@ class HBnBFacade:
             if not owner_id:
                 raise ValueError("owner_id is required")
 
+            rating = review_data.get('rating')
+            if rating is None or not (1 <= rating <= 5):
+                raise ValueError("Rating must be an integer between 1 and 5")
+
             place = self.place_repo.get(place_id)
             if not place:
                 raise ValueError(f"Place with id {place_id} does not exist")
@@ -73,11 +77,11 @@ class HBnBFacade:
             if not user:
                 raise ValueError(f"User with id {owner_id} does not exist")
 
-            review = Review(**review_data)
-            self.review_repo.add(review)
+            review_data['rating'] = int(review_data['rating'])
 
-            place.add_review(review)
-            self.place_repo.update(place.id, place.to_dict())
+            review = Review(**review_data)
+
+            self.review_repo.add(review)
 
             return review.to_dict()
         except (ValueError, TypeError) as e:
