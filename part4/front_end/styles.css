@@ -1,0 +1,309 @@
+/* Base Reset and Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+.details-card {
+    color: black;
+}
+
+body {
+    background-color: #E8ECD7; /* Couleur primaire */
+    color: #E8ECD7; /* Couleur claire */
+    line-height: 1.6;
+}
+
+/* Header Styles */
+header {
+    background-color: #1F4529; /* Couleur primaire */
+    color: #E8ECD7; /* Texte clair */
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+/* Logo Styles */
+.logo {
+    height: 50px;
+    max-width: 150px;
+    object-fit: contain;
+}
+
+/* Navigation Styles */
+nav {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    color: #E8ECD7; /* Texte clair */
+    text-decoration: none;
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+nav a:hover {
+    background-color: #47663B; /* Accentuation */
+}
+
+/* Footer Styles */
+footer {
+    background-color: #1F4529; /* Couleur primaire */
+    color: #EED3B1; /* Texte doux */
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+h1 {
+    color: #1F4529;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+h2 {
+    color: #1F4529;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+/* LOGIN */
+
+/* Login Button Styles */
+.login-button {
+    background-color: #EED3B1; /* Bouton doux */
+    color: #1F4529; /* Contraste primaire */
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #E8ECD7; /* Clair */
+}
+
+/* Login Form Styles */
+#login-form {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #E8ECD7; /* Clair */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#login-form h2 {
+    margin-bottom: 1rem;
+    color: #1F4529; /* Texte primaire */
+}
+
+#login-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #1F4529; /* Texte primaire */
+}
+
+#login-form input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #47663B; /* Secondaire */
+    border-radius: 5px;
+}
+
+#login-form button {
+    background-color: #EED3B1; /* Bouton doux */
+    color: #1F4529; /* Contraste primaire */
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* INDEX PLACES */
+
+#places-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.place-card {
+    flex: 0 1 300px;
+    margin: 10px;
+}
+
+/* Main Content Area */
+main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 80px;
+    margin-bottom: 80px;
+}
+
+
+.card h3,
+.card p,
+.card a {
+    margin-bottom: 10px;
+}
+
+/* Place Card Styles */
+.place-card {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #47663B;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    color: #E8ECD7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.place-card:hover {
+    transform: scale(1.02);
+}
+
+/* Details Button Styles */
+.details-button {
+    background-color: #EED3B1; /* Bouton doux */
+    color: #1F4529; /* Texte primaire */
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.details-button:hover {
+    background-color: #E8ECD7; /* Clair */
+}
+
+/* PLACE */
+
+/* Place Details Styles */
+.place-details {
+    background-color: #E8ECD7; /* Clair */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    color: #1F4529; /* Texte primaire */
+}
+
+.place-info {
+    margin-bottom: 20px;
+}
+
+/* Review Card Styles */
+.review-card {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #47663B; /* Accentuation */
+    border-radius: 10px;
+    background-color: #E8ECD7; /* Clair */
+    color: #1F4529; /* Texte primaire */
+}
+
+.details-card {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #47663B; /* Accentuation */
+    border-radius: 10px;
+    background-color: #E8ECD7; /* Clair */
+    color: #1F4529; /* Texte primaire */
+    text-align: center;
+}
+
+/* REVIEW */
+
+/* Add Review Form Styles */
+.add-review {
+    margin: 20px 0;
+}
+
+#review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #E8ECD7; /* Clair */
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#review-form label {
+    color: #1F4529; /* Texte primaire */
+}
+
+#review-form textarea, #review-form select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #47663B; /* Secondaire */
+    border-radius: 5px;
+}
+
+#review-form button {
+    background-color: #EED3B1; /* Bouton doux */
+    color: #1F4529; /* Texte primaire */
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* INDEX */
+
+/* Dans la section =Cartes ou =Global */
+#filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1F4529;
+}
+
+#filter h1 {
+    margin-bottom: 15px;
+}
+
+#filter label,
+#filter select {
+    margin-bottom: 10px;
+}
+
+#price-filter {
+    color: #E8ECD7;
+    background-color: #1F4529;
+    text-align: center;
+    padding: 5px 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
