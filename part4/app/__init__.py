@@ -22,16 +22,7 @@ def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    CORS(app, resources={
-        r"/api/*": {
-            "origins": ["http://localhost:5000", "http://127.0.0.1:5000",
-                       "http://localhost", "http://127.0.0.1",
-                       "http://localhost:5500", "http://127.0.0.1:5500"],
-            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization", "Accept"],
-            "supports_credentials": True
-        }
-    })
+    CORS(app)
 
     api = Api(app, version='1.0', title='HBnB API', description='HBnB Application API')
 

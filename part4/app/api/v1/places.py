@@ -55,16 +55,11 @@ class PlaceList(Resource): # FINI
 class PlaceResource(Resource):
     @api.response(200, 'Place details retrieved successfully')
     @api.response(404, 'Place not found')
-    @jwt_required()
     def get(self, place_id):
         """Get place details by ID"""
-        current_user = get_jwt_identity()
         place = facade.get_place(place_id)
         if not place:
             return {'error': 'Place not found'}, 404
-
-        if place.owner_id != current_user['id']:
-            return {'error': 'You are not the place owner'}, 403
 
         owner = facade.get_user(place.owner_id)
         if not owner:
@@ -74,17 +69,11 @@ class PlaceResource(Resource):
             "id": place.id,
             "title": place.title,
             "description": place.description,
-            "price": place.price,
+            "price": float(place.price),
             "latitude": place.latitude,
             "longitude": place.longitude,
             "owner_id": place.owner_id,
-            "owner": {
-                "id": owner.id,
-                "first_name": owner.first_name,
-                "last_name": owner.last_name,
-                "email": owner.email
-            },
-            "reviews": [{"id": review.id, "text": review.text, "rating": review.rating, "user_id": review.user_id} for review in place.reviews],
+            "reviews": [{"id": review.id, "text": review.text, "rating": review.rating, "user_id": review.owner_id} for review in place.reviews],
             "amenities": [{ "id": i.id, "name": i.name } for i in place.amenities]
         }, 200
 

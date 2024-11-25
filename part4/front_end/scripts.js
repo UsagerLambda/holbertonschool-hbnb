@@ -4,7 +4,9 @@ const API_URL = 'http://127.0.0.1:5000/api/v1/auth/login';
 const GET_ALL_PLACES = 'http://127.0.0.1:5000/api/v1/places';
 const GET_PLACE = 'http://127.0.0.1:5000/api/v1/places'
 const POST_REVIEW = 'http://127.0.0.1:5000/api/v1/reviews';
-const GET_REVIEWS_FROM_PLACE = 'http://127.0.0.1:5000/api/v1/reviews/places/{place_id}';
+const GET_REVIEWS_FROM_PLACE = 'http://127.0.0.1:5000/api/v1/reviews/places';
+const GET_USER_BY_ID = 'http://127.0.0.1:5000/api/v1/users'
+
 
 // URL HTML =================================================================================== //
 
@@ -48,6 +50,30 @@ function displayAddReview() {
     addReviewSection.style.display = 'none';
   } else {
     addReviewSection.style.display = 'block';
+  }
+}
+// Fonction pour récupérer un utilisateur
+async function getUser(id) {
+  const requestUrl = `${GET_USER_BY_ID}/${id}`;
+  const token = getCookie('token')
+  try {
+    const response = await fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP ! statut : ${response.status}`);
+    }
+    const data = await response.json();
+    const user = `${data.first_name} ${data.last_name}`
+    return user;
+
+  } catch (error) {
+    console.error('Erreur lors de la récupération de l’utilisateur :', error);
+    return null;
   }
 }
 // LOGIN ====================================================================================== //
@@ -190,7 +216,7 @@ async function placeLoad() {
   try {
     displayAddReview();
     const placeData = await getPlaceIdFromURL();
-    console.log(placeData);
+    displayPlaceInfos(placeData);
   } catch (error) {
     console.error('Erreur lors du chargement:', error);
   }
@@ -202,7 +228,6 @@ async function getPlaceIdFromURL() {
     const placeId = url.searchParams.get('place_id');
     const token = getCookie('token');
     const requestUrl = `${GET_PLACE}/${placeId}`;
-    console.log("API REQUEST: ",requestUrl, " TOKEN: ", token);
 
     // Appel API avec fetch
     const response = await fetch(requestUrl, {
@@ -224,6 +249,89 @@ async function getPlaceIdFromURL() {
   } catch (error) {
     console.error('Erreur dans getPlaceIdFromURL:', error);
     throw error;
+  }
+}
+
+async function displayPlaceInfos(data) {
+  const placeBucket = document.getElementById('place-details'); // Cible la section existante
+  placeBucket.innerHTML = ''; // Vide le contenu actuel pour le remplacer
+
+  // Ajout du titre
+  const placeTitle = document.createElement('h1');
+  placeTitle.textContent = data.title || 'Unknown Title'; // Utilise une clé "title" ou une valeur par défaut
+  placeBucket.appendChild(placeTitle);
+
+  // Création de la carte de détails
+  const placeElement = document.createElement('div');
+  placeElement.classList.add('details-card');
+
+  // Ajout des informations dynamiques
+  placeElement.innerHTML = `
+    <p><strong>Host:</strong> ${await getUser(data.owner_id) || 'Unknown Host'}</p>
+    <p><strong>Price per night:</strong> $${data.price || 'N/A'}</p>
+    <p><strong>Description:</strong> ${data.description || 'No description available.'}</p>
+    <p><strong>Amenities:</strong> ${data.amenities ? data.amenities.join(', ') : 'No amenities listed.'}</p>
+  `;
+
+  placeBucket.appendChild(placeElement); // Ajout de la carte à la section
+  displayPlaceReviews(data); // appelle la fonction pour afficher les reviews de la place
+}
+
+async function displayPlaceReviews(placeData) {
+  const reviewsList = document.getElementById('reviews');
+  reviewsList.innerHTML = '';
+  console.log(placeData);
+  try {
+    const placeId = placeData.id;
+    const requestUrl = `${GET_REVIEWS_FROM_PLACE}/${placeId}`;
+
+    // Effectuer la requête pour obtenir les données de reviews
+    const response = await fetch(requestUrl);
+    if (!response.ok) {
+      const titleElement = document.createElement('h2');
+      titleElement.textContent = 'Reviews';
+      reviewsList.appendChild(titleElement);
+      const reviewCard = document.createElement('div');
+      reviewCard.classList.add('review-card');
+      reviewCard.innerHTML += `<p>No reviews available for this place.</p>`;
+      reviewsList.appendChild(reviewCard);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const reviewsData = await response.json();
+
+    loadReviews(reviewsData);
+
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+  }
+}
+
+async function loadReviews(datas) {
+  const reviewsList = document.getElementById('reviews');
+
+  // Vide tout le contenu existant (y compris le titre)
+  reviewsList.innerHTML = '';
+
+  // Ajout du titre de la section
+  const titleElement = document.createElement('h2');
+  titleElement.textContent = 'Reviews';
+  reviewsList.appendChild(titleElement);
+
+  // Ajout dynamique des cartes de review
+  for (const data of datas) {
+    const reviewCard = document.createElement('div');
+    reviewCard.classList.add('review-card');
+
+    // Remplit le contenu de la carte
+    reviewCard.innerHTML = `
+      <p><strong>${await getUser(data.owner_id)}:</strong></p>
+      <p>${data.text}</p>
+      <p>Rating: ${'★'.repeat(data.rating)}${'☆'.repeat(5 - data.rating)}</p>
+    `;
+
+    // Ajoute la carte au conteneur
+    reviewsList.appendChild(reviewCard);
   }
 }
 
