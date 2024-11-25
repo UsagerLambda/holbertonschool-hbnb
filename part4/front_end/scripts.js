@@ -2,7 +2,7 @@
 
 const API_URL = 'http://127.0.0.1:5000/api/v1/auth/login';
 const GET_ALL_PLACES = 'http://127.0.0.1:5000/api/v1/places';
-const GET_PLACE = 'http://127.0.0.1:5000/api/v1/places/{place_id}'
+const GET_PLACE = 'http://127.0.0.1:5000/api/v1/places'
 const POST_REVIEW = 'http://127.0.0.1:5000/api/v1/reviews';
 const GET_REVIEWS_FROM_PLACE = 'http://127.0.0.1:5000/api/v1/reviews/places/{place_id}';
 
@@ -12,6 +12,11 @@ const LOGIN_PAGE_URL = 'http://127.0.0.1:5500/part4/front_end/login.html';
 const INDEX_PAGE_URL = 'http://127.0.0.1:5500/part4/front_end/index.html';
 const PLACE_PAGE_URL = 'http://127.0.0.1:5500/part4/front_end/place.html';
 const REVIEW_PAGE_URL = 'http://127.0.0.1:5500/part4/front_end/add_review.html';
+
+const LOGIN = 'login.html';
+const INDEX = 'index.html';
+const PLACE = 'place.html';
+const ADD_REVIEW = 'add_review.html'
 
 // AUTH ======================================================================================= //
 
@@ -35,7 +40,16 @@ function getCookie(name) {
   }
   return null;
 }
-
+// Fonction pour afficher ou non la section "Add Review" dans la page place.html si l'utilisateur est loggé
+function displayAddReview() {
+  const token = getCookie('token');
+  const addReviewSection = document.getElementById('add-review');
+  if (!token) {
+    addReviewSection.style.display = 'none';
+  } else {
+    addReviewSection.style.display = 'block';
+  }
+}
 // LOGIN ====================================================================================== //
 
 // Fonction pour gérer les cookies
@@ -140,7 +154,7 @@ function displayPlaces(places) {
     placeElement.innerHTML = `
       <h3 class="place-name">${place.title}</h3>
       <p class="place-price">Price per night: $${place.price}</p>
-      <a href="place.html" class="button login-button">View Details</a>`;
+      <a href="place.html?place_id=${place.id}" class="button login-button">View Details</a>`;
     // Ajoute l'élément
     placesList.appendChild(placeElement);
   });
@@ -172,8 +186,45 @@ function priceFilter() {
 
 // PLACE ====================================================================================== //
 
-function placeLoad() {
-  console.log("place")
+async function placeLoad() {
+  try {
+    displayAddReview();
+    const placeData = await getPlaceIdFromURL();
+    console.log(placeData);
+  } catch (error) {
+    console.error('Erreur lors du chargement:', error);
+  }
+}
+
+async function getPlaceIdFromURL() {
+  try {
+    const url = new URL(window.location.href);
+    const placeId = url.searchParams.get('place_id');
+    const token = getCookie('token');
+    const requestUrl = `${GET_PLACE}/${placeId}`;
+    console.log("API REQUEST: ",requestUrl, " TOKEN: ", token);
+
+    // Appel API avec fetch
+    const response = await fetch(requestUrl, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // Vérification de la réponse
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP: ${response.status} - ${await response.text()}`);
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    console.error('Erreur dans getPlaceIdFromURL:', error);
+    throw error;
+  }
 }
 
 // REVIEW ===================================================================================== //
@@ -186,19 +237,23 @@ function reviewLoad() {
 
 document.addEventListener('DOMContentLoaded', () => {
   checkAuthentication();
-    if (window.location.href === LOGIN_PAGE_URL) {
-      loginLoad();
+
+  // Récupère le nom du fichier depuis l'URL
+  const currentPage = window.location.pathname.split('/').pop();
+
+  if (currentPage === LOGIN) {
+    loginLoad();
   }
 
-    if (window.location.href === INDEX_PAGE_URL) {
-      indexLoad();
+  if (currentPage === INDEX) {
+    indexLoad();
   }
 
-    if (window.location.href === PLACE_PAGE_URL) {
-      placeLoad();
+  if (currentPage === PLACE) {
+    placeLoad();
   }
 
-    if (window.location.href === REVIEW_PAGE_URL) {
-      reviewLoad();
+  if (currentPage === ADD_REVIEW) {
+    reviewLoad();
   }
 });
