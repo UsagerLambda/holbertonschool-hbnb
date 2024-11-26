@@ -146,6 +146,9 @@ class PlaceAmenity(Resource):
         if not amenity:
             return {"message": "Add amenity to place"}
 
-        place.amenities.append(amenity)
-        return {"message": "Add amenity to place"}, 200
+        try:
+            facade.associate_place_to_amenity(place_id, amenity_id)
+            return {"message": "Place and amenity are now associated."}, 200
+        except Exception as e:
+            return {"error": str(e)}, 400
 

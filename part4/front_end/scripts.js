@@ -285,7 +285,7 @@ async function displayPlaceInfos(data) {
     <p><strong>Host:</strong> ${await getUser(data.owner_id) || 'Unknown Host'}</p>
     <p><strong>Price per night:</strong> $${data.price || 'N/A'}</p>
     <p><strong>Description:</strong> ${data.description || 'No description available.'}</p>
-    <p><strong>Amenities:</strong> ${data.amenities ? data.amenities.join(', ') : 'No amenities listed.'}</p>
+    <p><strong>Amenities:</strong> ${data.amenities ? data.amenities.map(amenity => amenity.name).join(', ') : 'No amenities listed.'}</p>
   `;
 
   placeBucket.appendChild(placeElement); // Ajout de la carte à la section
@@ -351,9 +351,18 @@ async function loadReviews(datas) {
 
 async function addReview() {
   const reviewForm = document.getElementById('review-form');
+  // Crée un div pour afficher les erreurs ================== //
+  const errorMessageElement = document.createElement('div');
+  // Style //
+  errorMessageElement.style.color = 'red';
+  errorMessageElement.style.marginTop = '10px';
+  // Ajouté dans l'élément review-form //
+  reviewForm.appendChild(errorMessageElement);
+  // ======================================================== //
   if (reviewForm) {
     reviewForm.addEventListener('submit', async (event) => {
       event.preventDefault();
+      errorMessageElement.textContent = '';
       try {
         const url = new URL(window.location.href);
         const placeId = url.searchParams.get('place_id');
@@ -378,9 +387,19 @@ async function addReview() {
               place_id: placeId
           })
         });
+
+        // Gestion des réponses non-OK
         if (!response.ok) {
           const errorText = await response.text();
           console.error('Server response:', errorText);
+
+          // si le status de la reponse est 409 (doublon)
+          if (response.status === 409) {
+            errorMessageElement.textContent = 'Vous avez déjà posté un avis pour cet établissement.';
+            return;
+          }
+
+          // Pour les autres types d'erreurs, on lance une exception
           throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
         }
 
@@ -389,8 +408,10 @@ async function addReview() {
 
         reviewForm.reset();
 
+      // erreur du try
       } catch (error) {
         console.error('Error submitting review:', error);
+        errorMessageElement.textContent = 'Une erreur est survenue lors de l\'envoi de votre avis.';
       }
     });
   }

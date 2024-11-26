@@ -65,6 +65,12 @@ class HBnBFacade:
             if not owner_id:
                 raise ValueError("owner_id is required")
 
+            # si l'user à déja une review
+            existing_reviews = self.get_reviews_by_place(place_id)
+            for review in existing_reviews:
+                if review.owner_id == owner_id:
+                    raise ValueError(f"User {owner_id} has already reviewed this place")
+
             rating = review_data.get('rating')
             if rating is None or not (1 <= rating <= 5):
                 raise ValueError("Rating must be an integer between 1 and 5")

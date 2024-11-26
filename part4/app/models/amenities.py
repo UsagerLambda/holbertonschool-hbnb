@@ -24,5 +24,6 @@ class Amenity(BaseModel):
     def to_dict(self):
         """Convert the Amenity object into a dictionary."""
         return {
+            'id': self.id,
             'name': self.name
         }

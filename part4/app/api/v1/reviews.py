@@ -51,6 +51,10 @@ class ReviewList(Resource):
                 "owner_id": review['owner_id'],
                 "place_id": review['place_id']
             }, 201
+        except ValueError as e:
+            if "already reviewed" in str(e):
+                return {"error": str(e)}, 409
+            return {"error": "Invalid input data"}, 400
         except Exception as e:
             return {"error": "Invalid input data"}, 400
 

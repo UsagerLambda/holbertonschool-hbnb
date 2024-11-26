@@ -29,7 +29,7 @@ class Place(BaseModel):
             'longitude': self.longitude,
             'owner_id': self.owner_id,
             'reviews': [review.to_dict() if hasattr(review, 'to_dict') else review for review in self.reviews],
-            'amenities': self.amenities
+            'amenities': [amenity.to_dict() if hasattr(amenity, 'to_dict') else amenity for amenity in self.amenities]
         }
 
     @property
