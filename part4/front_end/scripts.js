@@ -5,7 +5,7 @@ const GET_ALL_PLACES = 'http://127.0.0.1:5000/api/v1/places';
 const GET_PLACE = 'http://127.0.0.1:5000/api/v1/places'
 const POST_REVIEW = 'http://127.0.0.1:5000/api/v1/reviews';
 const GET_REVIEWS_FROM_PLACE = 'http://127.0.0.1:5000/api/v1/reviews/places';
-const GET_USER_BY_ID = 'http://127.0.0.1:5000/api/v1/users'
+const GET_USER_BY_ID = 'http://127.0.0.1:5000/api/v1/users';
 
 
 // URL HTML =================================================================================== //
@@ -76,6 +76,21 @@ async function getUser(id) {
     return null;
   }
 }
+
+async function getUserId() {
+  const token = getCookie('token')
+
+  // Decode the JWT token to get the user ID
+  const tokenParts = token.split('.');
+  if (tokenParts.length !== 3) {
+    throw new Error('Invalid token');
+  }
+
+  const payload = JSON.parse(atob(tokenParts[1]));
+  return payload.sub.id;
+
+}
+
 // LOGIN ====================================================================================== //
 
 // Fonction pour gérer les cookies
@@ -280,7 +295,6 @@ async function displayPlaceInfos(data) {
 async function displayPlaceReviews(placeData) {
   const reviewsList = document.getElementById('reviews');
   reviewsList.innerHTML = '';
-  console.log(placeData);
   try {
     const placeId = placeData.id;
     const requestUrl = `${GET_REVIEWS_FROM_PLACE}/${placeId}`;
@@ -335,6 +349,49 @@ async function loadReviews(datas) {
   }
 }
 
+async function addReview() {
+  const reviewForm = document.getElementById('review-form');
+  if (reviewForm) {
+    reviewForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      try {
+        const url = new URL(window.location.href);
+        const placeId = url.searchParams.get('place_id');
+        const ownerId = await getUserId();
+        const token = getCookie('token');
+
+        const formData = new FormData(event.target);
+        console.log("FETCH");
+        const response = await fetch(POST_REVIEW, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              text: formData.get('review-text'),
+              rating: Number(formData.get('rating')),
+              owner_id: ownerId,
+              place_id: placeId
+          })
+        });
+        console.log("RESPONSE");
+        if (!response.ok) {
+          throw new Error('Failed to submit review');
+        }
+
+        console.log('Review submitted successfully', result);
+
+        reviewForm.reset();
+
+      } catch (error) {
+        console.error('Error submitting review:', error);
+      }
+    });
+  }
+}
+
 // REVIEW ===================================================================================== //
 
 function reviewLoad() {
@@ -348,7 +405,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Récupère le nom du fichier depuis l'URL
   const currentPage = window.location.pathname.split('/').pop();
-
   if (currentPage === LOGIN) {
     loginLoad();
   }
@@ -359,6 +415,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (currentPage === PLACE) {
     placeLoad();
+    addReview();
   }
 
   if (currentPage === ADD_REVIEW) {
