@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, make_response
 from flask_restx import Api
 from werkzeug.exceptions import BadRequest
 from flask_bcrypt import Bcrypt
@@ -23,6 +23,16 @@ def create_app(config_class="config.DevelopmentConfig"):
     app.config.from_object(config_class)
 
     CORS(app)
+
+    @app.before_request
+    def handle_preflight():
+        if request.method == 'OPTIONS':
+            response = make_response()
+            response.headers.add("Access-Control-Allow-Origin", request.headers.get('Origin', '*'))
+            response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+            response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
+            response.headers.add('Access-Control-Allow-Credentials', 'true')
+            return response, 204
 
     api = Api(app, version='1.0', title='HBnB API', description='HBnB Application API')
 

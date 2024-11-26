@@ -1,6 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services import facade
+from flask import make_response, request
 
 api = Namespace('reviews', description='Review operations')
 
@@ -13,12 +14,26 @@ review_model = api.model('Review', {
 
 @api.route('/')
 class ReviewList(Resource):
+    @api.doc(description='Handle CORS preflight request')
+    def options(self):
+        """Handle CORS preflight request"""
+        response = make_response()
+        # Get the origin from the request, default to your frontend origin
+        origin = request.headers.get('Origin', 'http://127.0.0.1:5500')
+
+        response.headers.add("Access-Control-Allow-Origin", origin)
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'POST,OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response, 204
+
     @jwt_required()
     @api.expect(review_model)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
-    def post(self): # FINI
+    def post(self):
         """Register a new review"""
+        origin = request.headers.get('Origin', 'http://127.0.0.1:5500')
         current_user = get_jwt_identity()
         review_data = api.payload
         try:

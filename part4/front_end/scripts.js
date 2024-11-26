@@ -361,13 +361,15 @@ async function addReview() {
         const token = getCookie('token');
 
         const formData = new FormData(event.target);
-        console.log("FETCH");
+
         const response = await fetch(POST_REVIEW, {
             method: 'POST',
-            credentials: 'include',
+            mode: 'cors',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Origin': window.location.origin
             },
             body: JSON.stringify({
               text: formData.get('review-text'),
@@ -376,11 +378,13 @@ async function addReview() {
               place_id: placeId
           })
         });
-        console.log("RESPONSE");
         if (!response.ok) {
-          throw new Error('Failed to submit review');
+          const errorText = await response.text();
+          console.error('Server response:', errorText);
+          throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
         }
 
+        const result = await response.json();
         console.log('Review submitted successfully', result);
 
         reviewForm.reset();

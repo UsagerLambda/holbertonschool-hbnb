@@ -15,7 +15,6 @@ class Review(BaseModel):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        print("Review initialized with:", kwargs)
 
     def to_dict(self):
         return {
