@@ -2,7 +2,7 @@
 
 const API_URL = 'http://127.0.0.1:5000/api/v1/auth/login';
 const GET_ALL_PLACES = 'http://127.0.0.1:5000/api/v1/places';
-const GET_PLACE = 'http://127.0.0.1:5000/api/v1/places'
+const GET_PLACE = 'http://127.0.0.1:5000/api/v1/places';
 const POST_REVIEW = 'http://127.0.0.1:5000/api/v1/reviews';
 const GET_REVIEWS_FROM_PLACE = 'http://127.0.0.1:5000/api/v1/reviews/places';
 const GET_USER_BY_ID = 'http://127.0.0.1:5000/api/v1/users';
@@ -18,7 +18,7 @@ const REVIEW_PAGE_URL = 'http://127.0.0.1:5500/part4/front_end/add_review.html';
 const LOGIN = 'login.html';
 const INDEX = 'index.html';
 const PLACE = 'place.html';
-const ADD_REVIEW = 'add_review.html'
+const ADD_REVIEW = 'add_review.html';
 
 // AUTH ======================================================================================= //
 
@@ -35,7 +35,7 @@ function checkAuthentication() {
 // Fonction pour récupérer le cookie et ainsi vérifier si l'utilisateur est loggé
 function getCookie(name) {
   const cookies = document.cookie.split(";");
-  for (cookie of cookies) {
+  for (const cookie of cookies) {
     if (cookie.startsWith(name + "=")) {
       return cookie.substring(name.length + 1);
     }
@@ -55,7 +55,7 @@ function displayAddReview() {
 // Fonction pour récupérer un utilisateur
 async function getUser(id) {
   const requestUrl = `${GET_USER_BY_ID}/${id}`;
-  const token = getCookie('token')
+  const token = getCookie('token');
   try {
     const response = await fetch(requestUrl, {
       method: 'GET',
@@ -68,17 +68,17 @@ async function getUser(id) {
       throw new Error(`Erreur HTTP ! statut : ${response.status}`);
     }
     const data = await response.json();
-    const user = `${data.first_name} ${data.last_name}`
+    const user = `${data.first_name} ${data.last_name}`;
     return user;
 
   } catch (error) {
-    console.error('Erreur lors de la récupération de l’utilisateur :', error);
+    console.error('Erreur lors de la récupération de l\’utilisateur :', error);
     return null;
   }
 }
 
 async function getUserId() {
-  const token = getCookie('token')
+  const token = getCookie('token');
 
   // Decode the JWT token to get the user ID
   const tokenParts = token.split('.');
