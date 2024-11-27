@@ -137,15 +137,15 @@ function loginLoad() {
                 } else {
                     const errorElement = document.getElementById('error-message');
                     if (errorElement) {
-                        errorElement.textContent = data.message || 'Échec de la connexion';
+                        errorElement.textContent = data.message || 'Connection failed.';
                         errorElement.style.display = 'block';
                     } else {
-                        alert('Échec de la connexion');
+                        alert('Connection failed.');
                     }
                 }
             } catch (error) {
-                console.error('Erreur de login:', error);
-                alert('Erreur lors de la connexion');
+                console.error('Login error:', error);
+                alert('Error during connection.');
             }
         });
     }
@@ -395,7 +395,12 @@ async function addReview() {
 
           // si le status de la reponse est 409 (doublon)
           if (response.status === 409) {
-            errorMessageElement.textContent = 'Vous avez déjà posté un avis pour cet établissement.';
+            errorMessageElement.textContent = 'You have already posted a review for this establishment.';
+            return;
+          }
+
+          if (response.status === 403) {
+            errorMessageElement.textContent = 'You cannot leave a review for your own establishment.';
             return;
           }
 
@@ -411,7 +416,7 @@ async function addReview() {
       // erreur du try
       } catch (error) {
         console.error('Error submitting review:', error);
-        errorMessageElement.textContent = 'Une erreur est survenue lors de l\'envoi de votre avis.';
+        errorMessageElement.textContent = 'An error occurred while submitting your review.';
       }
     });
   }

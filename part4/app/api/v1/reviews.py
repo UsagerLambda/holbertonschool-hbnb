@@ -38,8 +38,11 @@ class ReviewList(Resource):
         review_data = api.payload
         try:
             place = facade.get_place(review_data['place_id'])
+            print(place.owner_id)
             if not place:
                 return {"error": "Invalid place id"}, 404
+            if place.owner_id == current_user['id']:
+                return {"error": "You cannot review your own place"}, 403
             if review_data['owner_id'] != current_user['id']:
                 return {"error": "Unauthorized action"}, 403
 

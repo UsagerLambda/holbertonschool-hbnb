@@ -62,6 +62,32 @@ pip install -r requirements.txt
 
 L'application sera accessible à l'adresse http://127.0.0.1:5000.
 
+## Login infos
+
+### User 1
+```
+first_name: John
+last_name: Doe
+email: john.doe@mail.com
+password: Pass1234
+```
+
+### User 2
+```
+first_name: Alice
+last_name: Smith
+email: alice.smith@mail.com
+password: Alice2024
+```
+
+### User 3
+```
+first_name: Bob
+last_name: Johnson
+email: bob.johnson@mail.com
+password: Secure
+```
+
 ## Diagrammes
 
 ```mermaid
