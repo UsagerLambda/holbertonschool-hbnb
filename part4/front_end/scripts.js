@@ -217,9 +217,9 @@ function priceFilter() {
 
       // si le prix de la place est inférieur ou égal au prix selectionné (0 si 'All' est select)
       if (selectedPrice === 0 || placePrice <= selectedPrice) {
-        card.style.display = 'block'; // affiche la carte
+        card.classList.remove('hidden'); // supprime la class hidden
       } else { // sinon
-        card.style.display = 'none'; // cache la carte
+        card.classList.add('hidden'); // ajoute la class hidden
       }
     });
   });

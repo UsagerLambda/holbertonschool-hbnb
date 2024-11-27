@@ -1,25 +1,51 @@
+/* Color Palette Variables */
+:root {
+    /* Primary Colors */
+    --color-primary-dark: #1F4529;
+    --color-primary-light: #E8ECD7;
+    --color-secondary: #47663B;
+
+    /* Accent Colors */
+    --color-accent: #EED3B1;
+
+    /* Typography */
+    --font-primary: 'Roboto', Arial, sans-serif;
+}
+
 /* Base Reset and Global Styles */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', Arial, sans-serif;
-}
-
-.details-card {
-    color: black;
+    font-family: var(--font-primary);
 }
 
 body {
-    background-color: #E8ECD7; /* Couleur primaire */
-    color: #E8ECD7; /* Couleur claire */
+    background-color: var(--color-primary-light);
+    color: var(--color-primary-dark);
     line-height: 1.6;
+}
+
+/* Typography Styles */
+h1 {
+    color: var(--color-primary-dark);
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 55px;
+}
+
+h2 {
+    color: var(--color-primary-dark);
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 5px;
 }
 
 /* Header Styles */
 header {
-    background-color: #1F4529; /* Couleur primaire */
-    color: #E8ECD7; /* Texte clair */
+    background-color: var(--color-primary-dark);
+    color: var(--color-primary-light);
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
@@ -31,13 +57,6 @@ header {
     z-index: 10;
 }
 
-/* Logo Styles */
-.logo {
-    height: 50px;
-    max-width: 150px;
-    object-fit: contain;
-}
-
 /* Navigation Styles */
 nav {
     display: flex;
@@ -45,7 +64,7 @@ nav {
 }
 
 nav a {
-    color: #E8ECD7; /* Texte clair */
+    color: var(--color-primary-light);
     text-decoration: none;
     margin-left: 1rem;
     padding: 0.5rem 1rem;
@@ -55,13 +74,13 @@ nav a {
 }
 
 nav a:hover {
-    background-color: #47663B; /* Accentuation */
+    background-color: var(--color-secondary);
 }
 
 /* Footer Styles */
 footer {
-    background-color: #1F4529; /* Couleur primaire */
-    color: #EED3B1; /* Texte doux */
+    background-color: var(--color-primary-dark);
+    color: var(--color-accent);
     text-align: center;
     padding: 1rem;
     position: fixed;
@@ -69,88 +88,11 @@ footer {
     width: 100%;
 }
 
-h1 {
-    color: #1F4529;
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 5px;
-}
-
-h2 {
-    color: #1F4529;
-    margin-top: 10px;
-    margin-bottom: 5px;
-}
-
-/* LOGIN */
-
-/* Login Button Styles */
-.login-button {
-    background-color: #EED3B1; /* Bouton doux */
-    color: #1F4529; /* Contraste primaire */
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.login-button:hover {
-    background-color: #E8ECD7; /* Clair */
-}
-
-/* Login Form Styles */
-#login-form {
-    max-width: 400px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background-color: #E8ECD7; /* Clair */
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-#login-form h2 {
-    margin-bottom: 1rem;
-    color: #1F4529; /* Texte primaire */
-}
-
-#login-form label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #1F4529; /* Texte primaire */
-}
-
-#login-form input {
-    width: 100%;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    border: 1px solid #47663B; /* Secondaire */
-    border-radius: 5px;
-}
-
-#login-form button {
-    background-color: #EED3B1; /* Bouton doux */
-    color: #1F4529; /* Contraste primaire */
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* INDEX PLACES */
-
-#places-list {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: nowrap;
-    margin-top: 20px;
-}
-
-.place-card {
-    flex: 0 1 300px;
-    margin: 10px;
+/* Logo Styles */
+.logo {
+    height: 50px;
+    max-width: 150px;
+    object-fit: contain;
 }
 
 /* Main Content Area */
@@ -162,60 +104,13 @@ main {
     margin-bottom: 80px;
 }
 
-.card {
-    display: flex;
-    flex-direction: column; /* Empile les éléments verticalement */
-    align-items: flex-start; /* Optionnel : alignement du texte à gauche */
-    gap: 10px; /* Contrôle centralisé de l'espacement entre éléments */
-}
-
-.card h3 {
-    font-size: 3rem;
-    margin-bottom: 10px;
-}
-
-.card p {
-    font-size: 1.5rem;
-    margin-top: 5px;
-    margin-bottom: 10px;
-}
-
-.card a {
-    font-size: 1.5rem;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    text-decoration: none;
-}
-
-/* Place Card Styles */
-.place-card {
-    width: 500px;
-    max-width: 100%;
-    flex: 0 0 500px;
-    margin: 20px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background-color: #47663B;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-    color: #E8ECD7;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    min-height: 500px;
-    justify-content: space-between;
-}
-
-.place-card:hover {
-    transform: scale(1.02);
-}
-
-/* Details Button Styles */
-.details-button {
-    background-color: #EED3B1; /* Bouton doux */
-    color: #1F4529; /* Texte primaire */
+/* Button Styles */
+.login-button,
+.details-button,
+#login-form button,
+#review-form button {
+    background-color: var(--color-accent);
+    color: var(--color-primary-dark);
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 5px;
@@ -223,92 +118,166 @@ main {
     transition: background-color 0.3s ease;
 }
 
-.details-button:hover {
-    background-color: #E8ECD7; /* Clair */
+.login-button:hover,
+.details-button:hover,
+#login-form button:hover,
+#review-form button:hover {
+    background-color: var(--color-primary-light);
 }
 
-/* PLACE */
+/* Login Form Styles */
+#login-form {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: var(--color-primary-light);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#login-form h2 {
+    margin-bottom: 1rem;
+    color: var(--color-primary-dark);
+}
+
+#login-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary-dark);
+}
+
+#login-form input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--color-secondary);
+    border-radius: 5px;
+}
+
+/* Places List Styles */
+#places-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+    margin-top: 20px;
+}
+
+/* Place Card Styles */
+.place-card {
+    width: 500px;
+    max-width: 100%;
+    flex: 0 0 500px;
+    margin: 10px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: var(--color-secondary);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    color: var(--color-primary-light);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrage horizontal */
+    justify-content: center; /* Centrage vertical */
+    text-align: center;
+    min-height: 400px;
+}
+
+.place-card:hover {
+    transform: scale(1.02);
+}
+
+.place-card h3 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.place-card p {
+    font-size: 1.5rem;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.place-card a {
+    font-size: 1.5rem;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-decoration: none;
+}
 
 /* Place Details Styles */
 .place-details {
-    background-color: #E8ECD7; /* Clair */
+    background-color: var(--color-primary-light);
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    color: #1F4529; /* Texte primaire */
+    color: var(--color-primary-dark);
 }
 
 .place-info {
     margin-bottom: 20px;
 }
 
-/* Review Card Styles */
+/* Review Styles */
 .review-card {
     margin: 20px;
-    padding: 10px;
-    border: 1px solid #47663B; /* Accentuation */
+    padding: 20px;
+    border: 1px solid var(--color-secondary);
     border-radius: 10px;
-    background-color: #E8ECD7; /* Clair */
-    color: #1F4529; /* Texte primaire */
+    background-color: var(--color-primary-light);
+    color: var(--color-primary-dark);
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .details-card {
     margin: 20px;
-    padding: 10px;
-    border: 1px solid #47663B; /* Accentuation */
+    padding: 30px;
+    border: 1px solid var(--color-secondary);
     border-radius: 10px;
-    background-color: #E8ECD7; /* Clair */
-    color: #1F4529; /* Texte primaire */
+    background-color: var(--color-primary-light);
+    color: var(--color-primary-dark);
     text-align: center;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* REVIEW */
-
-/* Add Review Form Styles */
+/* Review Form Styles */
 .add-review {
-    margin: 20px 0;
+    margin: 0px 0;
 }
 
 #review-form {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background-color: #E8ECD7; /* Clair */
+    border: 1px solid var(--color-secondary);
+    background-color: var(--color-primary-light);
     padding: 1rem;
     border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 #review-form label {
-    color: #1F4529; /* Texte primaire */
+    color: var(--color-primary-dark);
 }
 
-#review-form textarea, #review-form select {
+#review-form textarea,
+#review-form select {
     width: 100%;
     padding: 0.5rem;
-    border: 1px solid #47663B; /* Secondaire */
+    border: 1px solid var(--color-secondary);
     border-radius: 5px;
 }
 
-#review-form button {
-    background-color: #EED3B1; /* Bouton doux */
-    color: #1F4529; /* Texte primaire */
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-/* INDEX */
-
-/* Dans la section =Cartes ou =Global */
+/* Filter Styles */
 #filter {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     margin-bottom: 20px;
-    color: #1F4529;
+    color: var(--color-primary-dark);
 }
 
 #filter h1 {
@@ -318,15 +287,20 @@ main {
 #filter label,
 #filter select {
     margin-bottom: 10px;
+    font-size: 20px;
 }
 
 #price-filter {
-    color: #E8ECD7;
-    background-color: #1F4529;
+    color: var(--color-primary-light);
+    background-color: var(--color-primary-dark);
     text-align: center;
-    padding: 5px 5px;
+    padding: 5px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+}
+
+.hidden {
+    display: none;
 }
