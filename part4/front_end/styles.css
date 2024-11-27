@@ -144,7 +144,7 @@ h2 {
     justify-content: center;
     align-items: center;
     gap: 20px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-top: 20px;
 }
 
@@ -162,17 +162,38 @@ main {
     margin-bottom: 80px;
 }
 
+.card {
+    display: flex;
+    flex-direction: column; /* Empile les éléments verticalement */
+    align-items: flex-start; /* Optionnel : alignement du texte à gauche */
+    gap: 10px; /* Contrôle centralisé de l'espacement entre éléments */
+}
 
-.card h3,
-.card p,
-.card a {
+.card h3 {
+    font-size: 3rem;
     margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 1.5rem;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.card a {
+    font-size: 1.5rem;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-decoration: none;
 }
 
 /* Place Card Styles */
 .place-card {
+    width: 500px;
+    max-width: 100%;
+    flex: 0 0 500px;
     margin: 20px;
-    padding: 10px;
+    padding: 15px;
     border: 1px solid #ddd;
     border-radius: 10px;
     background-color: #47663B;
@@ -183,6 +204,8 @@ main {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    min-height: 500px;
+    justify-content: space-between;
 }
 
 .place-card:hover {
