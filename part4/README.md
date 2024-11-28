@@ -14,25 +14,78 @@ hbnb/
 │   │   ├── __init__.py
 │   │   ├── v1/
 │   │       ├── __init__.py
-│   │       ├── users.py
-│   │       ├── places.py
-│   │       ├── reviews.py
+│   │       ├── admin.py
 │   │       ├── amenities.py
+│   │       ├── auth.py
+│   │       ├── places.py
+│   │       ├── protected.py
+│   │       ├── reviews.py
+│   │       ├── users.py
 │   ├── models/
 │   │   ├── __init__.py
-│   │   ├── user.py
-│   │   ├── place.py
-│   │   ├── review.py
-│   │   ├── amenity.py
+│   │   ├── amenities.py
+│   │   ├── baseModel.py
+│   │   ├── PlaceAmenities.py
+│   │   ├── places.py
+│   │   ├── reviews.py
+│   │   ├── users.py
 │   ├── services/
 │   │   ├── __init__.py
 │   │   ├── facade.py
+│   │   ├── repositories/
+│   │       ├── AmenityRepository.py
+│   │       ├── PlaceAmenitiesRepository.py
+│   │       ├── PlaceRepository.py
+│   │       ├── ReviewRepository.py
+│   │       ├── UserRepository.py
 │   ├── persistence/
 │       ├── __init__.py
 │       ├── repository.py
+├── database/
+│   ├── Amenity.sql
+│   ├── data.sql
+│   ├── generate_uuid.py
+│   ├── initial_data.sql
+│   ├── insertion_place_amenity.sql
+│   ├── Place_Amenity.sql
+│   ├── Place.sql
+│   ├── Review.sql
+│   ├── schema.sql
+│   ├── script.py
+│   ├── test.sql
+│   ├── User.sql
+├── front_end/
+│   ├── add_review.html
+│   ├── index.html
+│   ├── login.html
+│   ├── place.html
+│   ├── scripts.js
+│   ├── styles.css
+│   ├── images/
+│       ├── icon_bath.png
+│       ├── icon_bed.png
+│       ├── icon_wifi.png
+│       ├── icon.png
+│       ├── logo.png
+├── instance/
+│   ├── development.db
+├── tests/
+│   ├── conftest.py
+│   ├── create_database.py
+│   ├── run_test.sh
+│   ├── test_01_users.py
+│   ├── test_02_places.py
+│   ├── test_03_reviews.py
+│   ├── test_04_amenities.py
+│   ├── test_05_admin.py
+│   ├── test_database.sql
+│   ├── utils.py
+│   ├── .pytest_cache/*
 ├── run.py
 ├── config.py
 ├── requirements.txt
+├── create_db.sh
+├── run_app.sh
 ├── README.md
 ```
 
@@ -56,7 +109,7 @@ pip install -r requirements.txt
 ```bash
 ./create_db.sh
 ```
-### Pour lancer le serveur, exécutez le fichier **run_app.sh**
+### Pour lancer le serveur, exécutez le fichier **run_app.sh** <span style="color: green;">(Option suggérée)</span>
 ```bash
 ./run_app.sh
 ```
