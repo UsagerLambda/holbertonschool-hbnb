@@ -104,12 +104,12 @@ pip install -r requirements.txt
 ```
 
 ## Utilisation
-<span style="color: yellow;">(Une base de données par défaut est déjà prédéfinie, si vous souhaitez simplement tester le code.)</span>.
+<span style="color: yellow;"> 🔴 (Une base de données par défaut est déjà prédéfinie, si vous souhaitez simplement tester le code.)</span>.
 ### Pour créer une nouvelle base de données et exécuter le serveur, lancez le fichier **create_db.sh**
 ```bash
 ./create_db.sh
 ```
-### Pour lancer le serveur, exécutez le fichier **run_app.sh** <span style="color: green;">(Option suggérée)</span>
+### Pour lancer le serveur, exécutez le fichier **run_app.sh** <span style="color: green;"> 🟢 (Option suggérée)</span>
 ```bash
 ./run_app.sh
 ```
