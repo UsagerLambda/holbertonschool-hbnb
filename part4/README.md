@@ -51,16 +51,19 @@ pip install -r requirements.txt
 ```
 
 ## Utilisation
-### Pour démarrer l'application la première fois, exécute le fichier **create_db.sh**
+<span style="color: yellow;">(Une base de données par défaut est déjà prédéfinie, si vous souhaitez simplement tester le code.)</span>.
+### Pour créer une nouvelle base de données et exécuter le serveur, lancez le fichier **create_db.sh**
 ```bash
 ./create_db.sh
 ```
-### Puis pour relancer le serveur sans perdre les données déja enregistrées , exécute le fichier **run_app.sh**
+### Pour lancer le serveur, exécutez le fichier **run_app.sh**
 ```bash
 ./run_app.sh
 ```
 
 L'application sera accessible à l'adresse http://127.0.0.1:5000.
+
+Vous pouvez accéder à l'interface de l'application en utilisant l'extension VS Code ``Live Server``. Après son installation, cliquez sur son icône en bas à droite de l'écran, puis sélectionnez le fichier ``index.html`` situé dans le dossier ``part4/front_end/``. L'application s'ouvrira ensuite dans votre navigateur.
 
 ## Login infos
 
