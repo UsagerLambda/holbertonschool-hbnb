@@ -165,9 +165,9 @@ main {
 
 /* Place Card Styles */
 .place-card {
-    width: 500px;
+    width: 400px;
     max-width: 100%;
-    flex: 0 0 500px;
+    flex: 0 0 400px;
     margin: 20px;
     padding: 10px;
     border: 1px solid #ddd;
@@ -181,7 +181,7 @@ main {
     align-items: center; /* Centrage horizontal */
     justify-content: center; /* Centrage vertical */
     text-align: center;
-    min-height: 400px;
+    min-height: 350px;
 }
 
 .place-card:hover {
