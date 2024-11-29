@@ -26,7 +26,6 @@ body {
     line-height: 1.6;
 }
 
-/* Typography Styles */
 h1 {
     color: var(--color-primary-dark);
     text-align: center;
@@ -36,6 +35,7 @@ h1 {
 }
 
 h2 {
+    margin: 20px;
     color: var(--color-primary-dark);
     margin-top: 10px;
     margin-bottom: 5px;
@@ -178,8 +178,8 @@ main {
     color: var(--color-primary-light);
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centrage horizontal */
-    justify-content: center; /* Centrage vertical */
+    align-items: center;
+    justify-content: center;
     text-align: center;
     min-height: 350px;
 }
@@ -247,6 +247,7 @@ main {
 }
 
 #review-form {
+    margin: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
