@@ -1,7 +1,7 @@
 // ROUTE API ================================================================================== //
 
 const API_URL = 'http://127.0.0.1:5000/api/v1/auth/login';
-const GET_ALL_PLACES = 'http://127.0.0.1:5000/api/v1/places';
+const GET_ALL_PLACES = 'http://127.0.0.1:5000/api/v1/places/';
 const GET_PLACE = 'http://127.0.0.1:5000/api/v1/places';
 const POST_REVIEW = 'http://127.0.0.1:5000/api/v1/reviews';
 const GET_REVIEWS_FROM_PLACE = 'http://127.0.0.1:5000/api/v1/reviews/places';
