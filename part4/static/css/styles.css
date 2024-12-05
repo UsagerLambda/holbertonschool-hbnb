@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+header {
+    background-color: #ff9800;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header .logo {
+    height: 40px;
+}
+header .login-button {
+    background-color: white;
+    color: #ff9800;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.main-title {
+    text-align: center;
+    margin: 20px 0;
+}
+#filter {
+    text-align: center;
+    margin: 20px 0;
+}
+.filter-label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+.filter-select {
+    padding: 5px;
+}
+.place-card, .review-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 20px auto;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.details-button {
+    background-color: #ff9800;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #ff9800;
+    color: white;
+}
+

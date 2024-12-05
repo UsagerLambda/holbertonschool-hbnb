@@ -1,0 +1,63 @@
+[
+    {
+        "id": "place-1",
+        "host_id": "user-1",
+        "host_name": "John Doe",
+        "description": "Beautiful Beach House",
+        "price_per_night": 150,
+        "city_id": "city-1",
+        "country_name": "United States",
+        "number_of_rooms": 3,
+        "number_of_bathrooms": 2,
+        "max_guests":5,
+        "amenities": ["WiFi", "Pool", "Air Conditioning"],
+        "reviews": [
+            {
+                "user_id": "user-2",
+                "user_name": "Jane Smith",
+                "comment": "Great place to stay!",
+                "rating": 4
+            },
+            {
+                "user_id": "user-4",
+                "user_name": "Robert Brown",
+                "comment": "Amazing location and very comfortable.",
+                "rating": 5
+            }
+        ]
+    },
+    {
+        "id": "place-2",
+        "host_id": "user-2",
+        "host_name": "Jane Smith",
+        "description": "Cozy Cabin",
+        "price_per_night": 100,
+        "city_id": "city-2",
+        "country_code": "US",
+        "country_name": "United States",
+        "number_of_rooms": 2,
+        "number_of_bathrooms": 1,
+        "max_guests": 5,
+        "amenities": ["WiFi", "Fireplace"],
+        "reviews": [
+
+        ]
+    },
+    {
+        "id": "place-3",
+        "host_id": "user-3",
+        "host_name": "Alice Johnson",
+        "description": "Modern Apartment",
+        "price_per_night": 200,
+        "city_id": "city-3",
+        "country_code": "US",
+        "country_name": "United States",
+        "number_of_rooms": 3,
+        "number_of_bathrooms": 3,
+        "max_guests": 6,
+        "amenities": ["WiFi", "Pool", "Beach Access"],
+        "reviews": [
+
+        ]
+    }
+]

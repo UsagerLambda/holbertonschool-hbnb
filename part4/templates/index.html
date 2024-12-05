@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Places</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <img src="../images/logo.png" alt="HBNB Logo" class="logo">
+            <a href="login.html" class="login-button">Login</a>
+        </nav>
+    </header>
+    <main>
+        <h1 class="main-title">Available Places</h1>
+        <section id="filter">
+            <label for="price-filter" class="filter-label">Max Price:</label>
+            <select id="price-filter" class="filter-select">
+                <option value="all">All</option>
+                <option value="100">$100</option>
+                <option value="150">$150</option>
+                <option value="200">$200</option>
+            </select>
+        </section>
+        <section id="places-list">
+            <div class="place-card">
+                <h2>Beautiful Beach House</h2>
+                <p>Price per night: $150</p>
+                <button class="details-button" onclick="window.location.href='place.html'">View Details</button>
+            </div>
+            <div class="place-card">
+                <h2>Cozy Cabin</h2>
+                <p>Price per night: $100</p>
+                <button class="details-button">View Details</button>
+            </div>
+            <div class="place-card">
+                <h2>Modern Apartment</h2>
+                <p>Price per night: $200</p>
+                <button class="details-button">View Details</button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>© 2024 HBNB Evolution. All rights reserved.</p>
+    </footer>
+    <script src="../static/js/scripts.js"></script>
+</body>
+</html>

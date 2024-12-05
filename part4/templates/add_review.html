@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Review</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <img src="../images/logo.png" alt="HBNB Logo" class="logo">
+            <a href="login.html" class="login-button">Login</a>
+        </nav>
+    </header>
+    <main>
+        <h1 class="main-title">Reviewing: Beautiful Beach House</h1>
+        <form id="review-form">
+            <label for="review" class="form-label">Your Review:</label>
+            <textarea id="review" name="review" class="form-textarea" required></textarea>
+            <label for="rating" class="form-label">Rating:</label>
+            <select id="rating" name="rating" class="form-select" required>
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="5">5 Stars</option>
+            </select>
+            <button type="submit" class="details-button">Submit Review</button>
+        </form>
+    </main>
+    <footer>
+        <p>© 2024 HBNB Evolution. All rights reserved.</p>
+    </footer>
+    <script src="../scripts/scripts.js"></script>
+</body>
+</html>

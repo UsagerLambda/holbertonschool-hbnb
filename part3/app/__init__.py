@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 from flask_restx import Api
 from werkzeug.exceptions import BadRequest
 from flask_bcrypt import Bcrypt
@@ -37,4 +38,5 @@ def create_app(config_class="config.DevelopmentConfig"):
     api.add_namespace(protected_ns, path='/api/v1/protected')  ###
     bcrypt.init_app(app)
     jwt.init_app(app)
+    CORS(app)
     return app
